@@ -44,6 +44,7 @@ class Vector(object):
 
     	return Vector(difference)
 
+
     def __mul__(self, scalar):
     	product = []
     	for i in range(0, self.dimension):
