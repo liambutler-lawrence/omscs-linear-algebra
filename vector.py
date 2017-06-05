@@ -42,3 +42,18 @@ class Vector(object):
     def times_scalar(self, c):
         product = [c*x for x in self.coordinates]
         return Vector(product)
+
+
+    def magnitude(self):
+        coordinates_squared = [x**2 for x in self.coordinates]
+
+        sum = 0
+        for x in coordinates_squared:
+            sum += x
+
+        return sum**0.5
+
+
+    def normalization(self):
+        inverse_magnitude = 1 / self.magnitude()
+        return self.times_scalar(inverse_magnitude)
