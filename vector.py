@@ -23,31 +23,22 @@ class Vector(object):
         return self.coordinates == v.coordinates
 
 
-    def __add__(self, v):
+    def plus(self, v):
         if self.dimension != v.dimension:
             raise ValueError('The vectors to add must be in the same dimension')
 
-        sum = []
-        for i in range(0, self.dimension):
-            sum.append(self.coordinates[i] + v.coordinates[i])
-
+        sum = [x+y for x,y in zip(self.coordinates, v.coordinates)]
         return Vector(sum)
 
 
-    def __sub__(self, v):
-    	if self.dimension != v.dimension:
-    		raise ValueError('The vectors to subtract must be in the same dimension')
+    def minus(self, v):
+        if self.dimension != v.dimension:
+            raise ValueError('The vectors to subtract must be in the same dimension')
 
-    	difference = []
-    	for i in range(0, self.dimension):
-    		difference.append(self.coordinates[i] - v.coordinates[i])
-
-    	return Vector(difference)
+        difference = [x-y for x,y in zip(self.coordinates, v.coordinates)]
+        return Vector(difference)
 
 
-    def __mul__(self, scalar):
-    	product = []
-    	for i in range(0, self.dimension):
-    		product.append(self.coordinates[i] * scalar)
-
-    	return Vector(product)
+    def times_scalar(self, c):
+        product = [c*x for x in self.coordinates]
+        return Vector(product)
