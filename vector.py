@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+
+from math import sqrt
+
+
 class Vector(object):
     def __init__(self, coordinates):
         try:
@@ -23,6 +27,20 @@ class Vector(object):
         return self.coordinates == v.coordinates
 
 
+    def magnitude(self):
+        coordinates_squared = [x**2 for x in self.coordinates]
+        return sqrt(sum(coordinates_squared))
+
+
+    def normalized(self):
+        try:
+            inverse_magnitude = 1./self.magnitude()
+            return self.times_scalar(inverse_magnitude)
+            
+        except ZeroDivisionError:
+            raise Exception('Cannot normalize the zero vector')
+
+
     def plus(self, v):
         if self.dimension != v.dimension:
             raise ValueError('The vectors to add must be in the same dimension')
@@ -42,18 +60,3 @@ class Vector(object):
     def times_scalar(self, c):
         product = [c*x for x in self.coordinates]
         return Vector(product)
-
-
-    def magnitude(self):
-        coordinates_squared = [x**2 for x in self.coordinates]
-
-        sum = 0
-        for x in coordinates_squared:
-            sum += x
-
-        return sum**0.5
-
-
-    def normalization(self):
-        inverse_magnitude = 1 / self.magnitude()
-        return self.times_scalar(inverse_magnitude)

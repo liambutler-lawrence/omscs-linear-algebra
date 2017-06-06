@@ -33,7 +33,7 @@ print_question('Magnitude 2')
 print Vector([8.813, -1.331, -6.247]).magnitude()
 
 print_question('Normalization 1')
-print Vector([5.581, -2.136]).normalization()
+print Vector([5.581, -2.136]).normalized()
 
 print_question('Normalization 2')
-print Vector([1.996, 3.108, -4.554]).normalization()
+print Vector([1.996, 3.108, -4.554]).normalized()
