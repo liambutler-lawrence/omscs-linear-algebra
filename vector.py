@@ -2,6 +2,8 @@
 
 
 from math import sqrt
+from math import acos
+from math import pi
 
 
 class Vector(object):
@@ -28,8 +30,8 @@ class Vector(object):
 
 
     def magnitude(self):
-        coordinates_squared = [x**2 for x in self.coordinates]
-        return sqrt(sum(coordinates_squared))
+        dot_product = self.dot(self)
+        return sqrt(dot_product)
 
 
     def normalized(self):
@@ -60,3 +62,22 @@ class Vector(object):
     def times_scalar(self, c):
         product = [c*x for x in self.coordinates]
         return Vector(product)
+
+
+    def dot(self, v):
+        coordinates_multiplied = [x*y for x,y in zip(self.coordinates, v.coordinates)]
+        return sum(coordinates_multiplied)
+
+
+    def angle_from(self, v):
+        try:
+            dot_product = self.normalized().dot(v.normalized())
+            return acos(dot_product)
+            
+        except Exception:
+            raise Exception('Cannot calculate the angle from/to the zero vector')
+
+
+    def angle_degrees_from(self, v):
+        angle_radians = self.angle_from(v)
+        return angle_radians * 180 / pi

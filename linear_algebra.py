@@ -37,3 +37,18 @@ print Vector([5.581, -2.136]).normalized()
 
 print_question('Normalization 2')
 print Vector([1.996, 3.108, -4.554]).normalized()
+
+
+print_quiz('Coding Dot Product & Angle')
+
+print_question('Dot Product 1')
+print Vector([7.887, 4.138]).dot(Vector([-8.802, 6.776]))
+
+print_question('Dot Product 2')
+print Vector([-5.955, -4.904, -1.874]).dot(Vector([-4.496, -8.755, 7.103]))
+
+print_question('Angle in Radians')
+print Vector([3.183, -7.627]).angle_from(Vector([-2.668, 5.319]))
+
+print_question('Angle in Degrees')
+print Vector([7.35, 0.221, 5.188]).angle_degrees_from(Vector([2.751, 8.259, 3.985]))
