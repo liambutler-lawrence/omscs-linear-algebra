@@ -1,5 +1,4 @@
 from vector import Vector
-from decimal import Decimal
 
 def print_info(caption):
     print
@@ -65,17 +64,17 @@ print Vector([7.35, 0.221, 5.188]).angle_with(Vector([2.751, 8.259, 3.985]), Tru
 
 print_quiz('Checking Parallel, Orthogonal')
 
-cpo_1_a = Vector([Decimal('-7.579'), Decimal('-7.88')])
-cpo_1_b = Vector([Decimal('22.737'), Decimal('23.64')])
+cpo_1_a = Vector([-7.579, -7.88])
+cpo_1_b = Vector([22.737, 23.64])
 
-cpo_2_a = Vector([Decimal('-2.029'), Decimal('9.97'), Decimal('4.172')])
-cpo_2_b = Vector([Decimal('-9.231'), Decimal('-6.639'), Decimal('-7.245')])
+cpo_2_a = Vector([-2.029, 9.97, 4.172])
+cpo_2_b = Vector([-9.231, -6.639, -7.245])
 
-cpo_3_a = Vector([Decimal('-2.328'), Decimal('-7.284'), Decimal('-1.214')])
-cpo_3_b = Vector([Decimal('-1.821'), Decimal('1.072'), Decimal('-2.94')])
+cpo_3_a = Vector([-2.328, -7.284, -1.214])
+cpo_3_b = Vector([-1.821, 1.072, -2.94])
 
-cpo_4_a = Vector([Decimal('2.118'), Decimal('4.827')])
-cpo_4_b = Vector([Decimal('0'), Decimal('0')])
+cpo_4_a = Vector([2.118, 4.827])
+cpo_4_b = Vector([0, 0])
 
 print_question('1 is Parallel')
 print cpo_1_a.is_parallel_with(cpo_1_b)
