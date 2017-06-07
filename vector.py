@@ -91,3 +91,14 @@ class Vector(object):
             else:
                 raise e
 
+
+    def is_parallel_with(self, v):
+        try:
+            remainders = [x/y for x,y in zip(self.coordinates, v.coordinates)]
+            return reduce( (lambda x,y: x == y), remainders )
+        except ZeroDivisionError:
+            return True
+
+
+    def is_orthogonal_with(self, v):
+        return self.dot(v) == 0

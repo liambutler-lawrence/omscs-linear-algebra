@@ -1,5 +1,11 @@
 from vector import Vector
+from decimal import Decimal
 
+def print_info(caption):
+    print
+    print
+    print caption + ' LINEAR ALGEBRA QUIZ LOG'
+    print
 
 def print_quiz(name):
     print
@@ -10,6 +16,9 @@ def print_quiz(name):
 def print_question(name):
     print
     print name + ':'
+
+
+print_info('BEGIN')
 
 
 print_quiz('Plus, Minus, Scalar Multiply')
@@ -52,3 +61,45 @@ print Vector([3.183, -7.627]).angle_with(Vector([-2.668, 5.319]))
 
 print_question('Angle in Degrees')
 print Vector([7.35, 0.221, 5.188]).angle_with(Vector([2.751, 8.259, 3.985]), True)
+
+
+print_quiz('Checking Parallel, Orthogonal')
+
+cpo_1_a = Vector([Decimal('-7.579'), Decimal('-7.88')])
+cpo_1_b = Vector([Decimal('22.737'), Decimal('23.64')])
+
+cpo_2_a = Vector([Decimal('-2.029'), Decimal('9.97'), Decimal('4.172')])
+cpo_2_b = Vector([Decimal('-9.231'), Decimal('-6.639'), Decimal('-7.245')])
+
+cpo_3_a = Vector([Decimal('-2.328'), Decimal('-7.284'), Decimal('-1.214')])
+cpo_3_b = Vector([Decimal('-1.821'), Decimal('1.072'), Decimal('-2.94')])
+
+cpo_4_a = Vector([Decimal('2.118'), Decimal('4.827')])
+cpo_4_b = Vector([Decimal('0'), Decimal('0')])
+
+print_question('1 is Parallel')
+print cpo_1_a.is_parallel_with(cpo_1_b)
+
+print_question('1 is Orthogonal')
+print cpo_1_a.is_orthogonal_with(cpo_1_b)
+
+print_question('2 is Parallel')
+print cpo_2_a.is_parallel_with(cpo_2_b)
+
+print_question('2 is Orthogonal')
+print cpo_2_a.is_orthogonal_with(cpo_2_b)
+
+print_question('3 is Parallel')
+print cpo_3_a.is_parallel_with(cpo_3_b)
+
+print_question('3 is Orthogonal')
+print cpo_3_a.is_orthogonal_with(cpo_3_b)
+
+print_question('4 is Parallel')
+print cpo_4_a.is_parallel_with(cpo_4_b)
+
+print_question('4 is Orthogonal')
+print cpo_4_a.is_orthogonal_with(cpo_4_b)
+
+
+print_info('END')
