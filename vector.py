@@ -1,17 +1,22 @@
 #!/usr/bin/env python
 
 
-from math import sqrt
-from math import acos
-from math import pi
+from math import sqrt, acos, pi
+from decimal import Decimal, getcontext
+
+
+getcontext().prec = 30
 
 
 class Vector(object):
+
+    CANNOT_NORMALIZE_ZERO_VECTOR_MSG = 'Cannot normalize the zero vector'
+
     def __init__(self, coordinates):
         try:
             if not coordinates:
                 raise ValueError
-            self.coordinates = tuple(coordinates)
+            self.coordinates = tuple([Decimal(x) for x in coordinates])
             self.dimension = len(coordinates)
 
         except ValueError:
@@ -31,16 +36,16 @@ class Vector(object):
 
     def magnitude(self):
         dot_product = self.dot(self)
-        return sqrt(dot_product)
+        return Decimal(sqrt(dot_product))
 
 
     def normalized(self):
         try:
-            inverse_magnitude = 1./self.magnitude()
+            inverse_magnitude = Decimal('1.0')/self.magnitude()
             return self.times_scalar(inverse_magnitude)
             
         except ZeroDivisionError:
-            raise Exception('Cannot normalize the zero vector')
+            raise Exception(CANNOT_NORMALIZE_ZERO_VECTOR_MSG)
 
 
     def plus(self, v):
@@ -60,7 +65,7 @@ class Vector(object):
 
 
     def times_scalar(self, c):
-        product = [c*x for x in self.coordinates]
+        product = [Decimal(c)*x for x in self.coordinates]
         return Vector(product)
 
 
@@ -69,15 +74,20 @@ class Vector(object):
         return sum(coordinates_multiplied)
 
 
-    def angle_from(self, v):
+    def angle_with(self, v, in_degrees=False):
         try:
             dot_product = self.normalized().dot(v.normalized())
-            return acos(dot_product)
+            angle_in_radians = acos(dot_product)
+
+            if in_degrees:
+                radians_to_degrees = 180. / pi
+                return angle_in_radians * radians_to_degrees
+            else:
+                return angle_in_radians
             
-        except Exception:
-            raise Exception('Cannot calculate the angle from/to the zero vector')
+        except Exception as e:
+            if str(e) == CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
+                raise Exception('Cannot calculate an angle with the zero vector')
+            else:
+                raise e
 
-
-    def angle_degrees_from(self, v):
-        angle_radians = self.angle_from(v)
-        return angle_radians * 180 / pi

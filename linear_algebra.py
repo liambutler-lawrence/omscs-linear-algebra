@@ -48,7 +48,7 @@ print_question('Dot Product 2')
 print Vector([-5.955, -4.904, -1.874]).dot(Vector([-4.496, -8.755, 7.103]))
 
 print_question('Angle in Radians')
-print Vector([3.183, -7.627]).angle_from(Vector([-2.668, 5.319]))
+print Vector([3.183, -7.627]).angle_with(Vector([-2.668, 5.319]))
 
 print_question('Angle in Degrees')
-print Vector([7.35, 0.221, 5.188]).angle_degrees_from(Vector([2.751, 8.259, 3.985]))
+print Vector([7.35, 0.221, 5.188]).angle_with(Vector([2.751, 8.259, 3.985]), True)
