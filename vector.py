@@ -4,13 +4,15 @@
 from math import sqrt, acos, pi
 from decimal import Decimal, getcontext
 
+CANNOT_NORMALIZE_ZERO_VECTOR_MSG = 'Cannot normalize the zero vector'
+
+
 
 getcontext().prec = 30
 
 
 class Vector(object):
 
-    CANNOT_NORMALIZE_ZERO_VECTOR_MSG = 'Cannot normalize the zero vector'
 
     def __init__(self, coordinates):
         try:
@@ -93,12 +95,33 @@ class Vector(object):
 
 
     def is_parallel_to(self, v, tolerance=1e-10):
-        try:
-            remainders = [x/y for x,y in zip(self.coordinates, v.coordinates)]
-            return reduce( (lambda x,y: abs(x-y) < tolerance), remainders )
-        except ZeroDivisionError:
-            return True
+        return (
+            self.is_zero() or 
+            v.is_zero() or 
+            self.angle_with(v) == pi or 
+            self.angle_with(v) == 0
+        )
+
+
+    def is_zero(self, tolerance=1e-10):
+        return self.magnitude() < tolerance
 
 
     def is_orthogonal_to(self, v, tolerance=1e-10):
         return abs(self.dot(v)) < tolerance
+
+
+    def projection_onto(self, b):
+        try:
+            unit_b = b.normalized()
+            return unit_b.times_scalar(self.dot(unit_b))
+
+        except Exception as e:
+            if str(e) == CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
+                raise Exception('Cannot project a vector onto the zero vector')
+            else:
+                raise e
+
+
+    def component_orthogonal_to(self, b):
+        return self.minus(self.projection_onto(b))

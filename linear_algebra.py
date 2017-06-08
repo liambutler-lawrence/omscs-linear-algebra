@@ -101,4 +101,28 @@ print_question('4 is Orthogonal')
 print cpo_4_a.is_orthogonal_to(cpo_4_b)
 
 
+print_quiz('Coding Vector Projections')
+
+cvp_1_v = Vector([3.039, 1.879])
+cvp_1_b = Vector([0.825, 2.036])
+
+cvp_2_v = Vector([-9.88, -3.264, -8.159])
+cvp_2_b = Vector([-2.155, -9.353, -9.473])
+
+cvp_3_v = Vector([3.009, -6.172, 3.692, -2.51])
+cvp_3_b = Vector([6.404, -9.144, 2.759, 8.718])
+
+print_question('Projection of 1 onto a Base')
+print cvp_1_v.projection_onto(cvp_1_b)
+
+print_question('Component of 2 Orthogonal to a Base')
+print cvp_2_v.component_orthogonal_to(cvp_2_b)
+
+print_question('Projection of 3 onto a Base')
+print cvp_3_v.projection_onto(cvp_3_b)
+
+print_question('Component of 3 Orthogonal to a Base')
+print cvp_3_v.component_orthogonal_to(cvp_3_b)
+
+
 print_info('END')
