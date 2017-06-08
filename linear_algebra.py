@@ -77,28 +77,28 @@ cpo_4_a = Vector([2.118, 4.827])
 cpo_4_b = Vector([0, 0])
 
 print_question('1 is Parallel')
-print cpo_1_a.is_parallel_with(cpo_1_b)
+print cpo_1_a.is_parallel_to(cpo_1_b)
 
 print_question('1 is Orthogonal')
-print cpo_1_a.is_orthogonal_with(cpo_1_b)
+print cpo_1_a.is_orthogonal_to(cpo_1_b)
 
 print_question('2 is Parallel')
-print cpo_2_a.is_parallel_with(cpo_2_b)
+print cpo_2_a.is_parallel_to(cpo_2_b)
 
 print_question('2 is Orthogonal')
-print cpo_2_a.is_orthogonal_with(cpo_2_b)
+print cpo_2_a.is_orthogonal_to(cpo_2_b)
 
 print_question('3 is Parallel')
-print cpo_3_a.is_parallel_with(cpo_3_b)
+print cpo_3_a.is_parallel_to(cpo_3_b)
 
 print_question('3 is Orthogonal')
-print cpo_3_a.is_orthogonal_with(cpo_3_b)
+print cpo_3_a.is_orthogonal_to(cpo_3_b)
 
 print_question('4 is Parallel')
-print cpo_4_a.is_parallel_with(cpo_4_b)
+print cpo_4_a.is_parallel_to(cpo_4_b)
 
 print_question('4 is Orthogonal')
-print cpo_4_a.is_orthogonal_with(cpo_4_b)
+print cpo_4_a.is_orthogonal_to(cpo_4_b)
 
 
 print_info('END')
