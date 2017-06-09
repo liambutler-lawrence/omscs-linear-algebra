@@ -40,7 +40,7 @@ class Vector(object):
 
     def magnitude(self):
         dot_product = self.dot(self)
-        return Decimal(sqrt(dot_product))
+        return dot_product**Decimal('0.5')
 
 
     def normalized(self):
