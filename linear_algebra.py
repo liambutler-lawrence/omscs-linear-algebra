@@ -112,14 +112,14 @@ cvp_2_b = Vector([-2.155, -9.353, -9.473])
 cvp_3_v = Vector([3.009, -6.172, 3.692, -2.51])
 cvp_3_b = Vector([6.404, -9.144, 2.759, 8.718])
 
-print_question('Projection of 1 onto a Base')
-print cvp_1_v.projection_onto(cvp_1_b)
+print_question('Component of 1 Parallel to a Base')
+print cvp_1_v.component_parallel_to(cvp_1_b)
 
 print_question('Component of 2 Orthogonal to a Base')
 print cvp_2_v.component_orthogonal_to(cvp_2_b)
 
-print_question('Projection of 3 onto a Base')
-print cvp_3_v.projection_onto(cvp_3_b)
+print_question('Component of 3 Parallel to a Base')
+print cvp_3_v.component_parallel_to(cvp_3_b)
 
 print_question('Component of 3 Orthogonal to a Base')
 print cvp_3_v.component_orthogonal_to(cvp_3_b)

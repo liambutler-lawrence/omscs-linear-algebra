@@ -4,8 +4,10 @@
 from math import sqrt, acos, pi
 from decimal import Decimal, getcontext
 
-CANNOT_NORMALIZE_ZERO_VECTOR_MSG = 'Cannot normalize the zero vector'
 
+CANNOT_NORMALIZE_ZERO_VECTOR_MSG = 'Cannot normalize the zero vector'
+CANNOT_FIND_UNIQUE_PARALLEL_COMPONENT_MSG = 'Cannot find a unique parallel component'
+CANNOT_FIND_UNIQUE_ORTHOGONAL_COMPONENT_MSG = 'Cannot find a unique orthogonal component'
 
 
 getcontext().prec = 30
@@ -111,17 +113,24 @@ class Vector(object):
         return abs(self.dot(v)) < tolerance
 
 
-    def projection_onto(self, b):
+    def component_parallel_to(self, b):
         try:
             unit_b = b.normalized()
             return unit_b.times_scalar(self.dot(unit_b))
 
         except Exception as e:
             if str(e) == CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
-                raise Exception('Cannot project a vector onto the zero vector')
+                raise Exception(CANNOT_FIND_UNIQUE_PARALLEL_COMPONENT_MSG)
             else:
                 raise e
 
 
     def component_orthogonal_to(self, b):
-        return self.minus(self.projection_onto(b))
+        try:
+            return self.minus(self.component_parallel_to(b))
+            
+        except Exception as e:
+            if str(e) == CANNOT_FIND_UNIQUE_PARALLEL_COMPONENT_MSG:
+                raise Exception(CANNOT_FIND_UNIQUE_ORTHOGONAL_COMPONENT_MSG)
+            else:
+                raise e
