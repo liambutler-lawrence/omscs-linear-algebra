@@ -125,4 +125,16 @@ print_question('Component of 3 Orthogonal to a Base')
 print cvp_3_v.component_orthogonal_to(cvp_3_b)
 
 
+print_quiz('Coding Cross Products')
+
+print_question('Cross Product')
+print Vector([8.462, 7.893, -8.187]).cross(Vector([6.984, -5.975, 4.778]))
+
+print_question('Area of Parallelogram')
+print Vector([-8.987, -9.838, 5.031]).area_of_parallelogram_with(Vector([-4.268, -1.861, -8.866]))
+
+print_question('Area of Triangle')
+print Vector([1.5, 9.547, 3.691]).area_of_triangle_with(Vector([-6.007, 0.124, 5.772]))
+
+
 print_info('END')

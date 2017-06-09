@@ -9,6 +9,10 @@ CANNOT_NORMALIZE_ZERO_VECTOR_MSG = 'Cannot normalize the zero vector'
 CANNOT_FIND_UNIQUE_PARALLEL_COMPONENT_MSG = 'Cannot find a unique parallel component'
 CANNOT_FIND_UNIQUE_ORTHOGONAL_COMPONENT_MSG = 'Cannot find a unique orthogonal component'
 
+VECTORS_TO_CROSS_MUST_BE_3D_MSG = 'The vectors to cross must be in the 3rd dimension'
+CAN_ONLY_FIND_PARALLELOGRAM_AREA_IN_2D_OR_3D_MSG = 'Can only find parallelogram area for vectors in the 2nd or 3rd dimensions'
+CAN_ONLY_FIND_TRIANGLE_AREA_IN_2D_OR_3D_MSG = 'Can only find triangle area for vectors in the 2nd or 3rd dimensions'
+
 
 getcontext().prec = 30
 
@@ -76,6 +80,56 @@ class Vector(object):
     def dot(self, v):
         coordinates_multiplied = [x*y for x,y in zip(self.coordinates, v.coordinates)]
         return sum(coordinates_multiplied)
+
+
+    def cross(self, v):
+        if self.dimension != 3 or self.dimension != v.dimension:
+            raise ValueError(VECTORS_TO_CROSS_MUST_BE_3D_MSG)
+
+        (x1, y1, z1) = self.coordinates
+        (x2, y2, z2) = v.coordinates
+
+        x = (y1 * z2) - (z1 * y2)
+        y = (z1 * x2) - (x1 * z2)
+        z = (x1 * y2) - (y1 * x2)
+
+        r = Vector([x, y, z])
+        print r.is_parallel_to(self)
+        print r.is_parallel_to(v)
+        print r.is_orthogonal_to(self)
+        print r.is_orthogonal_to(v)
+        return r
+
+
+    def area_of_parallelogram_with(self, v):
+        try:
+            return self.cross(v).magnitude()
+            
+        except Exception as e:
+            if str(e) == VECTORS_TO_CROSS_MUST_BE_3D_MSG:
+                if self.dimension == 2 and self.dimension == v.dimension:
+                    (self_x, self_y) = self.coordinates
+                    (v_x, v_y) = v.coordinates
+
+                    self_in_3d = Vector([self_x, self_y, 0])
+                    v_in_3d = Vector([v_x, v_y, 0])
+
+                    return self_in_3d.cross(v_in_3d).magnitude()
+                else:
+                    raise Exception(CAN_ONLY_FIND_PARALLELOGRAM_AREA_IN_2D_OR_3D_MSG)
+            else:
+                raise e
+
+
+    def area_of_triangle_with(self, v):
+        try:
+            return self.area_of_parallelogram_with(v) / 2
+
+        except Exception as e:
+            if str(e) == CAN_ONLY_FIND_PARALLELOGRAM_AREA_IN_2D_OR_3D_MSG:
+                raise Exception(CAN_ONLY_FIND_TRIANGLE_AREA_IN_2D_OR_3D_MSG)
+            else:
+                raise e
 
 
     def angle_with(self, v, in_degrees=False):
