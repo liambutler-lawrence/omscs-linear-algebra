@@ -80,11 +80,18 @@ class Vector(object):
 
 
     def cross(self, v):
-        if self.dimension != 3 or self.dimension != v.dimension:
-            raise ValueError(VECTORS_TO_CROSS_MUST_BE_3D_MSG)
-
-        (x1, y1, z1) = self.coordinates
-        (x2, y2, z2) = v.coordinates
+        # ranges are always exclusive; this generates a range containing 2 and 3
+        if self.dimension != v.dimension or self.dimension not in range(2, 4):
+            raise ValueError(self.ONLY_DEFINED_IN_2D_AND_3D_MSG)
+            
+        elif self.dimension == 2:
+            zero = (Decimal('0'),)
+            (x1, y1, z1) = self.coordinates + zero
+            (x2, y2, z2) = v.coordinates + zero
+            
+        else:
+            (x1, y1, z1) = self.coordinates
+            (x2, y2, z2) = v.coordinates
 
         x = (y1 * z2) - (z1 * y2)
         y = (z1 * x2) - (x1 * z2)
@@ -94,34 +101,11 @@ class Vector(object):
 
 
     def area_of_parallelogram_with(self, v):
-        try:
-            return self.cross(v).magnitude()
-            
-        except Exception as e:
-            if str(e) == VECTORS_TO_CROSS_MUST_BE_3D_MSG:
-                if self.dimension == 2 and self.dimension == v.dimension:
-                    (self_x, self_y) = self.coordinates
-                    (v_x, v_y) = v.coordinates
-
-                    self_in_3d = Vector([self_x, self_y, 0])
-                    v_in_3d = Vector([v_x, v_y, 0])
-
-                    return self_in_3d.cross(v_in_3d).magnitude()
-                else:
-                    raise Exception(CAN_ONLY_FIND_PARALLELOGRAM_AREA_IN_2D_OR_3D_MSG)
-            else:
-                raise e
+        return self.cross(v).magnitude()
 
 
     def area_of_triangle_with(self, v):
-        try:
-            return self.area_of_parallelogram_with(v) / 2
-
-        except Exception as e:
-            if str(e) == CAN_ONLY_FIND_PARALLELOGRAM_AREA_IN_2D_OR_3D_MSG:
-                raise Exception(CAN_ONLY_FIND_TRIANGLE_AREA_IN_2D_OR_3D_MSG)
-            else:
-                raise e
+        return self.area_of_parallelogram_with(v) / Decimal('2.0')
 
 
     def angle_with(self, v, in_degrees=False):
