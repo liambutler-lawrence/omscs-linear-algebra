@@ -5,19 +5,16 @@ from math import sqrt, acos, pi
 from decimal import Decimal, getcontext
 
 
-CANNOT_NORMALIZE_ZERO_VECTOR_MSG = 'Cannot normalize the zero vector'
-CANNOT_FIND_UNIQUE_PARALLEL_COMPONENT_MSG = 'Cannot find a unique parallel component'
-CANNOT_FIND_UNIQUE_ORTHOGONAL_COMPONENT_MSG = 'Cannot find a unique orthogonal component'
-
-VECTORS_TO_CROSS_MUST_BE_3D_MSG = 'The vectors to cross must be in the 3rd dimension'
-CAN_ONLY_FIND_PARALLELOGRAM_AREA_IN_2D_OR_3D_MSG = 'Can only find parallelogram area for vectors in the 2nd or 3rd dimensions'
-CAN_ONLY_FIND_TRIANGLE_AREA_IN_2D_OR_3D_MSG = 'Can only find triangle area for vectors in the 2nd or 3rd dimensions'
-
-
 getcontext().prec = 30
 
 
 class Vector(object):
+
+
+    CANNOT_NORMALIZE_ZERO_VECTOR_MSG = 'Cannot normalize the zero vector'
+    CANNOT_FIND_UNIQUE_PARALLEL_COMPONENT_MSG = 'Cannot find a unique parallel component'
+    CANNOT_FIND_UNIQUE_ORTHOGONAL_COMPONENT_MSG = 'Cannot find a unique orthogonal component'
+    ONLY_DEFINED_IN_2D_AND_3D_MSG = 'Only defined in the 2nd and 3rd dimensions'
 
 
     def __init__(self, coordinates):
@@ -53,7 +50,7 @@ class Vector(object):
             return self.times_scalar(inverse_magnitude)
             
         except ZeroDivisionError:
-            raise Exception(CANNOT_NORMALIZE_ZERO_VECTOR_MSG)
+            raise Exception(self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG)
 
 
     def plus(self, v):
@@ -93,12 +90,7 @@ class Vector(object):
         y = (z1 * x2) - (x1 * z2)
         z = (x1 * y2) - (y1 * x2)
 
-        r = Vector([x, y, z])
-        print r.is_parallel_to(self)
-        print r.is_parallel_to(v)
-        print r.is_orthogonal_to(self)
-        print r.is_orthogonal_to(v)
-        return r
+        return Vector([x, y, z])
 
 
     def area_of_parallelogram_with(self, v):
@@ -144,7 +136,7 @@ class Vector(object):
                 return angle_in_radians
             
         except Exception as e:
-            if str(e) == CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
+            if str(e) == self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
                 raise Exception('Cannot calculate an angle with the zero vector')
             else:
                 raise e
@@ -173,8 +165,8 @@ class Vector(object):
             return unit_b.times_scalar(self.dot(unit_b))
 
         except Exception as e:
-            if str(e) == CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
-                raise Exception(CANNOT_FIND_UNIQUE_PARALLEL_COMPONENT_MSG)
+            if str(e) == self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
+                raise Exception(self.CANNOT_FIND_UNIQUE_PARALLEL_COMPONENT_MSG)
             else:
                 raise e
 
@@ -184,7 +176,7 @@ class Vector(object):
             return self.minus(self.component_parallel_to(b))
             
         except Exception as e:
-            if str(e) == CANNOT_FIND_UNIQUE_PARALLEL_COMPONENT_MSG:
-                raise Exception(CANNOT_FIND_UNIQUE_ORTHOGONAL_COMPONENT_MSG)
+            if str(e) == self.CANNOT_FIND_UNIQUE_PARALLEL_COMPONENT_MSG:
+                raise Exception(self.CANNOT_FIND_UNIQUE_ORTHOGONAL_COMPONENT_MSG)
             else:
                 raise e
