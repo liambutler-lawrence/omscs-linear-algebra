@@ -83,12 +83,12 @@ class Vector(object):
         # ranges are always exclusive; this generates a range containing 2 and 3
         if self.dimension != v.dimension or self.dimension not in range(2, 4):
             raise ValueError(self.ONLY_DEFINED_IN_2D_AND_3D_MSG)
-            
+
         elif self.dimension == 2:
             zero = (Decimal('0'),)
             (x1, y1, z1) = self.coordinates + zero
             (x2, y2, z2) = v.coordinates + zero
-            
+
         else:
             (x1, y1, z1) = self.coordinates
             (x2, y2, z2) = v.coordinates
@@ -118,7 +118,7 @@ class Vector(object):
                 return angle_in_radians * radians_to_degrees
             else:
                 return angle_in_radians
-            
+
         except Exception as e:
             if str(e) == self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
                 raise Exception('Cannot calculate an angle with the zero vector')
@@ -158,7 +158,7 @@ class Vector(object):
     def component_orthogonal_to(self, b):
         try:
             return self.minus(self.component_parallel_to(b))
-            
+
         except Exception as e:
             if str(e) == self.CANNOT_FIND_UNIQUE_PARALLEL_COMPONENT_MSG:
                 raise Exception(self.CANNOT_FIND_UNIQUE_ORTHOGONAL_COMPONENT_MSG)
