@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-
-
 from math import sqrt, acos, pi
 from decimal import Decimal, getcontext
 
