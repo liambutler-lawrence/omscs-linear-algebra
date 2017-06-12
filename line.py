@@ -2,12 +2,16 @@ from decimal import Decimal, getcontext
 
 from vector import Vector
 
+
 getcontext().prec = 30
 
 
 class Line(object):
 
+
     NO_NONZERO_ELTS_FOUND_MSG = 'No nonzero elements found'
+    NO_UNIQUE_INTERSECTION_PARALLEL_LINES = 'Parallel lines have no intersection points'
+    NO_UNIQUE_INTERSECTION_COINCIDENT_LINES = 'Coincident lines have infinite intersection points'
 
     def __init__(self, normal_vector=None, constant_term=None):
         self.dimension = 2
@@ -26,7 +30,7 @@ class Line(object):
 
     def set_basepoint(self):
         try:
-            n = self.normal_vector
+            n = self.normal_vector.coordinates
             c = self.constant_term
             basepoint_coords = ['0']*self.dimension
 
@@ -67,7 +71,7 @@ class Line(object):
 
             return output
 
-        n = self.normal_vector
+        n = self.normal_vector.coordinates
 
         try:
             initial_index = Line.first_nonzero_index(n)
@@ -95,6 +99,39 @@ class Line(object):
             if not MyDecimal(item).is_near_zero():
                 return k
         raise Exception(Line.NO_NONZERO_ELTS_FOUND_MSG)
+
+
+    def is_parallel_to(self, l):
+        return self.normal_vector.is_parallel_to(l.normal_vector)
+
+
+    def is_equal_to(self, l):
+        if not self.is_parallel_to(l):
+            return False
+
+        v = self.basepoint.minus(l.basepoint)
+        return (v.is_orthogonal_to(self.normal_vector) and
+                v.is_orthogonal_to(l.normal_vector))
+
+
+    def intersection_with(self, l):
+        if self.is_parallel_to(l):
+            if self.is_equal_to(l):
+                raise Exception(self.NO_UNIQUE_INTERSECTION_COINCIDENT_LINES)
+            else:
+                raise Exception(self.NO_UNIQUE_INTERSECTION_PARALLEL_LINES)
+
+        (a, b) = self.normal_vector.coordinates
+        (c, d) = l.normal_vector.coordinates
+
+        k1 = self.constant_term
+        k2 = l.constant_term
+
+        x = (d * k1) - (b * k2)
+        y = (a * k2) - (c * k1)
+        denominator = (a * d) - (b * c)
+
+        return Vector([x / denominator, y / denominator])
 
 
 class MyDecimal(Decimal):
