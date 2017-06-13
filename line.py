@@ -10,8 +10,7 @@ class Line(object):
 
 
     NO_NONZERO_ELTS_FOUND_MSG = 'No nonzero elements found'
-    NO_UNIQUE_INTERSECTION_PARALLEL_LINES = 'Parallel lines have no intersection points'
-    NO_UNIQUE_INTERSECTION_COINCIDENT_LINES = 'Coincident lines have infinite intersection points'
+
 
     def __init__(self, normal_vector=None, constant_term=None):
         self.dimension = 2
@@ -105,33 +104,33 @@ class Line(object):
         return self.normal_vector.is_parallel_to(l.normal_vector)
 
 
-    def is_equal_to(self, l):
+    def __eq__(self, l):
         if not self.is_parallel_to(l):
             return False
 
-        v = self.basepoint.minus(l.basepoint)
-        return (v.is_orthogonal_to(self.normal_vector) and
-                v.is_orthogonal_to(l.normal_vector))
+        link = self.basepoint.minus(l.basepoint)
+        return link.is_orthogonal_to(self.normal_vector)
 
 
     def intersection_with(self, l):
-        if self.is_parallel_to(l):
-            if self.is_equal_to(l):
-                raise Exception(self.NO_UNIQUE_INTERSECTION_COINCIDENT_LINES)
+        try:
+            (a, b) = self.normal_vector.coordinates
+            (c, d) = l.normal_vector.coordinates
+
+            k1 = self.constant_term
+            k2 = l.constant_term
+
+            x = (d * k1) - (b * k2)
+            y = (a * k2) - (c * k1)
+            denominator = (a * d) - (b * c)
+
+            return Vector([0, 5]).divided_by_scalar(denominator)
+
+        except ZeroDivisionError:
+            if self == l:
+                return self
             else:
-                raise Exception(self.NO_UNIQUE_INTERSECTION_PARALLEL_LINES)
-
-        (a, b) = self.normal_vector.coordinates
-        (c, d) = l.normal_vector.coordinates
-
-        k1 = self.constant_term
-        k2 = l.constant_term
-
-        x = (d * k1) - (b * k2)
-        y = (a * k2) - (c * k1)
-        denominator = (a * d) - (b * c)
-
-        return Vector([x / denominator, y / denominator])
+                return None
 
 
 class MyDecimal(Decimal):

@@ -43,8 +43,7 @@ class Vector(object):
 
     def normalized(self):
         try:
-            inverse_magnitude = Decimal('1.0')/self.magnitude()
-            return self.times_scalar(inverse_magnitude)
+            return self.divided_by_scalar(self.magnitude())
             
         except ZeroDivisionError:
             raise Exception(self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG)
@@ -69,6 +68,11 @@ class Vector(object):
     def times_scalar(self, c):
         product = [Decimal(c)*x for x in self.coordinates]
         return Vector(product)
+
+
+    def divided_by_scalar(self, c):
+        inverted_c = Decimal('1') / Decimal(c)
+        return self.times_scalar(inverted_c)
 
 
     def dot(self, v):
@@ -123,7 +127,7 @@ class Vector(object):
                 raise e
 
 
-    def is_parallel_to(self, v, tolerance=1e-10):
+    def is_parallel_to(self, v):
         return (
             self.is_zero() or 
             v.is_zero() or 
