@@ -1,13 +1,17 @@
 from decimal import Decimal, getcontext
 
 from vector import Vector
+from line import Line
+
 
 getcontext().prec = 30
 
 
 class Plane(object):
 
+
     NO_NONZERO_ELTS_FOUND_MSG = 'No nonzero elements found'
+
 
     def __init__(self, normal_vector=None, constant_term=None):
         self.dimension = 3
@@ -26,7 +30,7 @@ class Plane(object):
 
     def set_basepoint(self):
         try:
-            n = self.normal_vector
+            n = self.normal_vector.coordinates
             c = self.constant_term
             basepoint_coords = ['0']*self.dimension
 
@@ -67,7 +71,7 @@ class Plane(object):
 
             return output
 
-        n = self.normal_vector
+        n = self.normal_vector.coordinates
 
         try:
             initial_index = Plane.first_nonzero_index(n)
@@ -95,6 +99,27 @@ class Plane(object):
             if not MyDecimal(item).is_near_zero():
                 return k
         raise Exception(Plane.NO_NONZERO_ELTS_FOUND_MSG)
+
+
+    def is_parallel_to(self, p):
+        return self.normal_vector.is_parallel_to(p.normal_vector)
+
+
+    def __eq__(self, p):
+        if not self.is_parallel_to(p):
+            return False
+
+        link = self.basepoint.minus(p.basepoint)
+        return link.is_orthogonal_to(self.normal_vector)
+
+
+    def intersection_with(self, p):
+        if self == p:
+            return self
+        elif self.is_parallel_to(p):
+            return None
+        else:
+            return Line()
 
 
 class MyDecimal(Decimal):
