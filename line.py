@@ -124,7 +124,7 @@ class Line(object):
             y = (a * k2) - (c * k1)
             denominator = (a * d) - (b * c)
 
-            return Vector([0, 5]).divided_by_scalar(denominator)
+            return Vector([x, y]).divided_by_scalar(denominator)
 
         except ZeroDivisionError:
             if self == l:
