@@ -113,6 +113,78 @@ class Plane(object):
         return link.is_orthogonal_to(self.normal_vector)
 
 
+    def times_scalar(self, c):
+        return Plane(
+            self.normal_vector.times_scalar(c),
+            self.constant_term * c
+        )
+
+
+    def plus(self, p):
+        return Plane(
+            self.normal_vector.plus(p.normal_vector),
+            self.constant_term + p.constant_term
+        )
+
+
+    def intersection_with_arr(self, arr_p):
+        # assume all same dimension
+        # assume unique intersection point
+        # assume dimension == number of equations
+
+        equations = [self] + arr_p
+        Plane.print_equations(equations, 'BEFORE')
+
+        Plane.iterate_for_intersections(equations, False)
+        Plane.print_equations(equations, 'PARTWAY')
+
+        Plane.iterate_for_intersections(equations, True)
+        Plane.print_equations(equations, 'AFTER')
+
+        for i, eq in enumerate(equations):
+            coordinates = list(eq.normal_vector.coordinates)            
+            normalizer = 1 / coordinates[i]
+
+            coordinates[i] = coordinates[i] * normalizer
+            eq.normal_vector = Vector(coordinates)
+
+            eq.constant_term = eq.constant_term * normalizer
+
+        Plane.print_equations(equations, 'FINAL') 
+
+
+    @staticmethod
+    def print_equations(equations, title):
+        print title
+
+        for e in equations:
+            print e
+
+        print 
+
+
+    @staticmethod
+    def iterate_for_intersections(equations, reverse):
+        eq_range = range(len(equations))
+    
+        for i in eq_range:
+            for j in eq_range:
+                #print 'I=' + str(i) + ' J=' + str(j)
+                if (not reverse and i < j) or (reverse and j < i):
+                    #print 'YES'
+                    cancel_first_term = equations[i].normal_vector.coordinates[i]
+                    cancel_second_term = equations[j].normal_vector.coordinates[i]  
+                    cancel_scalar = -1 * cancel_second_term / cancel_first_term
+
+                    eq_doing_canceling = equations[i].times_scalar(cancel_scalar)
+                    eq_to_be_canceled = equations[j]
+
+                    eq_canceled = eq_to_be_canceled.plus(eq_doing_canceling)
+                    equations[j] = eq_canceled
+                #else:
+                    #print 'NO'
+
+
     def intersection_with(self, p):
         if self == p:
             return self
