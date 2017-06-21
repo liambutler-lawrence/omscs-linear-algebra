@@ -135,22 +135,20 @@ class Plane(object):
         equations = [self] + arr_p
         Plane.print_equations(equations, 'BEFORE')
 
-        Plane.iterate_for_intersections(equations, False)
-        Plane.print_equations(equations, 'PARTWAY')
+        for x in range(0, 1):
+         try:
+            Plane.iterate_for_intersections(equations, False)
+            Plane.print_equations(equations, 'PARTWAY')
 
-        Plane.iterate_for_intersections(equations, True)
-        Plane.print_equations(equations, 'AFTER')
+            Plane.iterate_for_intersections(equations, True)
+            Plane.print_equations(equations, 'AFTER')
 
-        for i, eq in enumerate(equations):
-            coordinates = list(eq.normal_vector.coordinates)            
-            normalizer = 1 / coordinates[i]
-
-            coordinates[i] = coordinates[i] * normalizer
-            eq.normal_vector = Vector(coordinates)
-
-            eq.constant_term = eq.constant_term * normalizer
-
-        Plane.print_equations(equations, 'FINAL') 
+            Plane.normalize_for_intersections(equations)
+            Plane.print_equations(equations, 'FINAL') 
+            
+         except Exception as e:
+             Plane.print_equations(equations, 'FAILED')
+             print str(e)
 
 
     @staticmethod
@@ -166,14 +164,14 @@ class Plane(object):
     @staticmethod
     def iterate_for_intersections(equations, reverse):
         eq_range = range(len(equations))
-    
+
         for i in eq_range:
             for j in eq_range:
-                #print 'I=' + str(i) + ' J=' + str(j)
+                    #print 'I=' + str(i) + ' J=' + str(j)
                 if (not reverse and i < j) or (reverse and j < i):
-                    #print 'YES'
+                        #print 'YES'            return reduce( (lambda x,y: x == y), remainders )
                     cancel_first_term = equations[i].normal_vector.coordinates[i]
-                    cancel_second_term = equations[j].normal_vector.coordinates[i]  
+                    cancel_second_term = equations[j].normal_vector.coordinates[i]
                     cancel_scalar = -1 * cancel_second_term / cancel_first_term
 
                     eq_doing_canceling = equations[i].times_scalar(cancel_scalar)
@@ -181,8 +179,27 @@ class Plane(object):
 
                     eq_canceled = eq_to_be_canceled.plus(eq_doing_canceling)
                     equations[j] = eq_canceled
-                #else:
-                    #print 'NO'
+                    
+                    coordinates_are_zero = [e==0 for e in eq_canceled.normal_vector.coordinates]
+                    if reduce( (lambda a,b: a and b), coordinates_are_zero ):
+                        if eq_canceled.constant_term == 0:
+                            raise Exception('EQUATIONS RESOLVE TO AN EQUALITY')
+                        else:
+                            raise Exception('THESE EQUATIONS HAVE NO INTERSECTION')
+                    #else:
+                        #print 'NO'
+
+
+    @staticmethod
+    def normalize_for_intersections(equations):
+        for i, eq in enumerate(equations):
+            coordinates = list(eq.normal_vector.coordinates)            
+            normalizer = 1 / coordinates[i]
+
+            coordinates[i] = coordinates[i] * normalizer
+            eq.normal_vector = Vector(coordinates)
+
+            eq.constant_term = eq.constant_term * normalizer
 
 
     def intersection_with(self, p):
