@@ -11,6 +11,7 @@ class Plane(object):
 
 
     NO_NONZERO_ELTS_FOUND_MSG = 'No nonzero elements found'
+    SYSTEM_EQUATIONS_IS_INCONSISTENT_MSG = 'This system of equations is inconsistent'
 
 
     def __init__(self, normal_vector=None, constant_term=None):
@@ -129,14 +130,13 @@ class Plane(object):
 
     def intersection_with_arr(self, arr_p):
         # assume all same dimension
-        # assume unique intersection point
+        # assume unique intersection point or inconsistent
         # assume dimension == number of equations
 
         equations = [self] + arr_p
         Plane.print_equations(equations, 'BEFORE')
 
-        for x in range(0, 1):
-         try:
+        try:
             Plane.iterate_for_intersections(equations, False)
             Plane.print_equations(equations, 'PARTWAY')
 
@@ -144,11 +144,17 @@ class Plane(object):
             Plane.print_equations(equations, 'AFTER')
 
             Plane.normalize_for_intersections(equations)
-            Plane.print_equations(equations, 'FINAL') 
-            
-         except Exception as e:
-             Plane.print_equations(equations, 'FAILED')
-             print str(e)
+            Plane.print_equations(equations, 'FINAL')
+
+            return Vector([e.constant_term for e in equations])
+
+        except Exception as e:
+            Plane.print_equations(equations, 'FAILED')
+
+            if str(e) == self.SYSTEM_EQUATIONS_IS_INCONSISTENT_MSG:
+                return None
+            else:
+                return str(e)
 
 
     @staticmethod
@@ -158,7 +164,7 @@ class Plane(object):
         for e in equations:
             print e
 
-        print 
+        print
 
 
     @staticmethod
@@ -166,11 +172,19 @@ class Plane(object):
         eq_range = range(len(equations))
 
         for i in eq_range:
+        
+            # TODO: Determine if this swapping might ever need to happen on the reversed iteration, and if so, how to support that here.
+            if equations[i].normal_vector.coordinates[i] == 0:
+                equation_to_move_down = equations[i]
+                equations[i] = equations[i+1]
+                equations[i+1] = equation_to_move_down
+                
             for j in eq_range:
-                    #print 'I=' + str(i) + ' J=' + str(j)
+#                 print 'I=' + str(i) + ' J=' + str(j)
                 if (not reverse and i < j) or (reverse and j < i):
-                        #print 'YES'            return reduce( (lambda x,y: x == y), remainders )
+#                     print 'YES'
                     cancel_first_term = equations[i].normal_vector.coordinates[i]
+                    
                     cancel_second_term = equations[j].normal_vector.coordinates[i]
                     cancel_scalar = -1 * cancel_second_term / cancel_first_term
 
@@ -179,15 +193,15 @@ class Plane(object):
 
                     eq_canceled = eq_to_be_canceled.plus(eq_doing_canceling)
                     equations[j] = eq_canceled
-                    
+
                     coordinates_are_zero = [e==0 for e in eq_canceled.normal_vector.coordinates]
                     if reduce( (lambda a,b: a and b), coordinates_are_zero ):
                         if eq_canceled.constant_term == 0:
                             raise Exception('EQUATIONS RESOLVE TO AN EQUALITY')
                         else:
-                            raise Exception('THESE EQUATIONS HAVE NO INTERSECTION')
-                    #else:
-                        #print 'NO'
+                            raise Exception(Plane.SYSTEM_EQUATIONS_IS_INCONSISTENT_MSG)
+#                 else:
+#                     print 'NO'
 
 
     @staticmethod

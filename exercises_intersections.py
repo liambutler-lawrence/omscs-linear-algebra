@@ -57,10 +57,10 @@ mgep_3_c = Plane(Vector(['-1', '-2', '-1']), '1')
 print_question('Intersection 1')
 print mgep_1_a.intersection_with_arr([mgep_1_b, mgep_1_c])
 
-print_question('Intersection 1')
+print_question('Intersection 2')
 print mgep_2_a.intersection_with_arr([mgep_2_b, mgep_2_c])
 
-print_question('Intersection 1')
+print_question('Intersection 3')
 print mgep_3_a.intersection_with_arr([mgep_3_b, mgep_3_c])
 
 
