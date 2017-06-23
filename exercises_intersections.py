@@ -65,6 +65,21 @@ print_question('Intersection 3')
 print mgep_3_a.intersection_with_arr([mgep_3_b, mgep_3_c])
 
 
+def test(i, system, expression):
+    print
+    print 'BEFORE test {}: {}'.format(i, system)
+    print
+
+    if expression:
+        print 'test case {} passed'.format(i)
+    else:
+        print 'test case {} failed'.format(i)
+
+    print
+    print 'AFTER test {}: {}'.format(i, system)
+    print
+
+
 print_quiz('Coding Row Operations')
 
 cro_a = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
@@ -76,55 +91,46 @@ print_question('Test Cases')
 cro_s = LinearSystem([cro_a,cro_b,cro_c,cro_d])
 
 cro_s.swap_rows(0,1)
-if not (cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d):
-    print 'test case 1 failed'
+test(1, cro_s, (cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d))
 
 cro_s.swap_rows(1,3)
-if not (cro_s[0] == cro_b and cro_s[1] == cro_d and cro_s[2] == cro_c and cro_s[3] == cro_a):
-    print 'test case 2 failed'
+test(2, cro_s, (cro_s[0] == cro_b and cro_s[1] == cro_d and cro_s[2] == cro_c and cro_s[3] == cro_a))
 
 cro_s.swap_rows(3,1)
-if not (cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d):
-    print 'test case 3 failed'
+test(3, cro_s, (cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d))
 
 cro_s.multiply_coefficient_and_row(1,0)
-if not (cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d):
-    print 'test case 4 failed'
+test(4, cro_s, (cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d))
 
 cro_s.multiply_coefficient_and_row(-1,2)
-if not (cro_s[0] == cro_b and
+test(5, cro_s, (cro_s[0] == cro_b and
         cro_s[1] == cro_a and
         cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-        cro_s[3] == cro_d):
-    print 'test case 5 failed'
+        cro_s[3] == cro_d))
 
 cro_s.multiply_coefficient_and_row(10,1)
-if not (cro_s[0] == cro_b and
+test(6, cro_s, (cro_s[0] == cro_b and
         cro_s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
         cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-        cro_s[3] == cro_d):
-    print 'test case 6 failed'
+        cro_s[3] == cro_d))
 
 cro_s.add_multiple_times_row_to_row(0,0,1)
-if not (cro_s[0] == cro_b and
+test(7, cro_s, (cro_s[0] == cro_b and
         cro_s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
         cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-        cro_s[3] == cro_d):
-    print 'test case 7 failed'
+        cro_s[3] == cro_d))
 
 cro_s.add_multiple_times_row_to_row(1,0,1)
-if not (cro_s[0] == cro_b and
+test(8, cro_s, (cro_s[0] == cro_b and
         cro_s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
         cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-        cro_s[3] == cro_d):
-    print 'test case 8 failed'
+        cro_s[3] == cro_d))
 
 cro_s.add_multiple_times_row_to_row(-1,1,0)
-if not (cro_s[0] == Plane(normal_vector=Vector(['-10','-10','-10']), constant_term='-10') and
+test(9, cro_s, (cro_s[0] == Plane(normal_vector=Vector(['-10','-10','-10']), constant_term='-10') and
         cro_s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
         cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-        cro_s[3] == cro_d):
-    print 'test case 9 failed'
+        cro_s[3] == cro_d))
 
 
 print_info('END')

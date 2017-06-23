@@ -30,15 +30,34 @@ class LinearSystem(object):
 
 
     def swap_rows(self, row1, row2):
-        pass # add your code here
+        plane1 = self.planes[row1]
+
+        self.planes[row1] = self.planes[row2]
+        self.planes[row2] = plane1
 
 
     def multiply_coefficient_and_row(self, coefficient, row):
-        pass # add your code here
+        c = Decimal(coefficient)
+
+        plane = self.planes[row]
+
+        plane.normal_vector = plane.normal_vector.times_scalar(c)
+        plane.constant_term *= c
 
 
     def add_multiple_times_row_to_row(self, coefficient, row_to_add, row_to_be_added_to):
-        pass # add your code here
+        c = Decimal(coefficient)
+
+        plane_to_add = self.planes[row_to_add]
+        plane_to_be_added_to = self.planes[row_to_be_added_to]
+
+        # Multiply by coefficient
+        vector_to_add = plane_to_add.normal_vector.times_scalar(c)
+        constant_to_add = plane_to_add.constant_term * c
+
+        # Add together
+        plane_to_be_added_to.normal_vector = plane_to_be_added_to.normal_vector.plus(vector_to_add)
+        plane_to_be_added_to.constant_term = plane_to_be_added_to.constant_term + constant_to_add
 
 
     def indices_of_first_nonzero_terms_in_each_row(self):
