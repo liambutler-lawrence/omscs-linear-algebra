@@ -104,33 +104,70 @@ test(4, cro_s, (lambda: cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == 
 
 cro_s.multiply_coefficient_and_row(-1,2)
 test(5, cro_s, (lambda: cro_s[0] == cro_b and
-     cro_s[1] == cro_a and
-     cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-     cro_s[3] == cro_d))
+                        cro_s[1] == cro_a and
+                        cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+                        cro_s[3] == cro_d))
 
 cro_s.multiply_coefficient_and_row(10,1)
 test(6, cro_s, (lambda: cro_s[0] == cro_b and
-     cro_s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
-     cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-     cro_s[3] == cro_d))
+                        cro_s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
+                        cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+                        cro_s[3] == cro_d))
 
 cro_s.add_multiple_times_row_to_row(0,0,1)
 test(7, cro_s, (lambda: cro_s[0] == cro_b and
-     cro_s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
-     cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-     cro_s[3] == cro_d))
+                        cro_s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
+                        cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+                        cro_s[3] == cro_d))
 
 cro_s.add_multiple_times_row_to_row(1,0,1)
 test(8, cro_s, (lambda: cro_s[0] == cro_b and
-     cro_s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
-     cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-     cro_s[3] == cro_d))
+                        cro_s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
+                        cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+                        cro_s[3] == cro_d))
 
 cro_s.add_multiple_times_row_to_row(-1,1,0)
 test(9, cro_s, (lambda: cro_s[0] == Plane(normal_vector=Vector(['-10','-10','-10']), constant_term='-10') and
-     cro_s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
-     cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-     cro_s[3] == cro_d))
+                        cro_s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
+                        cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+                        cro_s[3] == cro_d))
+
+
+print_quiz('Coding Triangular Form')
+
+ctf_1_a = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
+ctf_1_b = Plane(normal_vector=Vector(['0','1','1']), constant_term='2')
+
+ctf_2_a = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
+ctf_2_b = Plane(normal_vector=Vector(['1','1','1']), constant_term='2')
+
+ctf_3_a = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
+ctf_3_b = Plane(normal_vector=Vector(['0','1','0']), constant_term='2')
+ctf_3_c = Plane(normal_vector=Vector(['1','1','-1']), constant_term='3')
+ctf_3_d = Plane(normal_vector=Vector(['1','0','-2']), constant_term='2')
+
+ctf_4_a = Plane(normal_vector=Vector(['0','1','1']), constant_term='1')
+ctf_4_b = Plane(normal_vector=Vector(['1','-1','1']), constant_term='2')
+ctf_4_c = Plane(normal_vector=Vector(['1','2','-5']), constant_term='3')
+
+ctf_1_s = LinearSystem([ctf_1_a, ctf_1_b]).compute_triangular_form()
+test(1, ctf_1_s, (lambda: t[0] == p1 and
+                          t[1] == p2))
+
+ctf_2_s = LinearSystem([ctf_2_a, ctf_2_b]).compute_triangular_form()
+test(2, ctf_2_s, (lambda: t[0] == p1 and
+                          t[1] == Plane(constant_term='1')))
+
+ctf_3_s = LinearSystem([ctf_3_a, ctf_3_b, ctf_3_c, ctf_3_d]).compute_triangular_form()
+test(3, ctf_3_s, (lambda: t[0] == p1 and
+                          t[1] == p2 and
+                          t[2] == Plane(normal_vector=Vector(['0','0','-2']), constant_term='2') and
+                          t[3] == Plane()))
+
+ctf_4_s = LinearSystem([ctf_4_a, ctf_4_b, ctf_4_c]).compute_triangular_form()
+test(4, ctf_4_s, (lambda: t[0] == Plane(normal_vector=Vector(['1','-1','1']), constant_term='2') and
+                          t[1] == Plane(normal_vector=Vector(['0','1','1']), constant_term='1') and
+                          t[2] == Plane(normal_vector=Vector(['0','0','-9']), constant_term='-2')))
 
 
 print_info('END')
