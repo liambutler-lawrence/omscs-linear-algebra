@@ -70,7 +70,7 @@ def test(i, system, expression):
     print 'BEFORE test {}: {}'.format(i, system)
     print
 
-    if expression:
+    if expression():
         print 'test case {} passed'.format(i)
     else:
         print 'test case {} failed'.format(i)
@@ -91,46 +91,46 @@ print_question('Test Cases')
 cro_s = LinearSystem([cro_a,cro_b,cro_c,cro_d])
 
 cro_s.swap_rows(0,1)
-test(1, cro_s, (cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d))
+test(1, cro_s, (lambda: cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d))
 
 cro_s.swap_rows(1,3)
-test(2, cro_s, (cro_s[0] == cro_b and cro_s[1] == cro_d and cro_s[2] == cro_c and cro_s[3] == cro_a))
+test(2, cro_s, (lambda: cro_s[0] == cro_b and cro_s[1] == cro_d and cro_s[2] == cro_c and cro_s[3] == cro_a))
 
 cro_s.swap_rows(3,1)
-test(3, cro_s, (cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d))
+test(3, cro_s, (lambda: cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d))
 
 cro_s.multiply_coefficient_and_row(1,0)
-test(4, cro_s, (cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d))
+test(4, cro_s, (lambda: cro_s[0] == cro_b and cro_s[1] == cro_a and cro_s[2] == cro_c and cro_s[3] == cro_d))
 
 cro_s.multiply_coefficient_and_row(-1,2)
-test(5, cro_s, (cro_s[0] == cro_b and
-        cro_s[1] == cro_a and
-        cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-        cro_s[3] == cro_d))
+test(5, cro_s, (lambda: cro_s[0] == cro_b and
+     cro_s[1] == cro_a and
+     cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+     cro_s[3] == cro_d))
 
 cro_s.multiply_coefficient_and_row(10,1)
-test(6, cro_s, (cro_s[0] == cro_b and
-        cro_s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
-        cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-        cro_s[3] == cro_d))
+test(6, cro_s, (lambda: cro_s[0] == cro_b and
+     cro_s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
+     cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+     cro_s[3] == cro_d))
 
 cro_s.add_multiple_times_row_to_row(0,0,1)
-test(7, cro_s, (cro_s[0] == cro_b and
-        cro_s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
-        cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-        cro_s[3] == cro_d))
+test(7, cro_s, (lambda: cro_s[0] == cro_b and
+     cro_s[1] == Plane(normal_vector=Vector(['10','10','10']), constant_term='10') and
+     cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+     cro_s[3] == cro_d))
 
 cro_s.add_multiple_times_row_to_row(1,0,1)
-test(8, cro_s, (cro_s[0] == cro_b and
-        cro_s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
-        cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-        cro_s[3] == cro_d))
+test(8, cro_s, (lambda: cro_s[0] == cro_b and
+     cro_s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
+     cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+     cro_s[3] == cro_d))
 
 cro_s.add_multiple_times_row_to_row(-1,1,0)
-test(9, cro_s, (cro_s[0] == Plane(normal_vector=Vector(['-10','-10','-10']), constant_term='-10') and
-        cro_s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
-        cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
-        cro_s[3] == cro_d))
+test(9, cro_s, (lambda: cro_s[0] == Plane(normal_vector=Vector(['-10','-10','-10']), constant_term='-10') and
+     cro_s[1] == Plane(normal_vector=Vector(['10','11','10']), constant_term='12') and
+     cro_s[2] == Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3') and
+     cro_s[3] == cro_d))
 
 
 print_info('END')

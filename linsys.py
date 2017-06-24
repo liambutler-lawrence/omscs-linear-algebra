@@ -48,16 +48,16 @@ class LinearSystem(object):
     def add_multiple_times_row_to_row(self, coefficient, row_to_add, row_to_be_added_to):
         c = Decimal(coefficient)
 
-        plane_to_add = self.planes[row_to_add]
-        plane_to_be_added_to = self.planes[row_to_be_added_to]
+        # Multiply equation 1 by coefficient
+        vector_to_add = self.planes[row_to_add].normal_vector.times_scalar(c)
+        constant_to_add = self.planes[row_to_add].constant_term * c
+        
+        # Add equations 1 and 2
+        result_vector = self.planes[row_to_be_added_to].normal_vector.plus(vector_to_add)
+        result_constant = self.planes[row_to_be_added_to].constant_term + constant_to_add
 
-        # Multiply by coefficient
-        vector_to_add = plane_to_add.normal_vector.times_scalar(c)
-        constant_to_add = plane_to_add.constant_term * c
-
-        # Add together
-        plane_to_be_added_to.normal_vector = plane_to_be_added_to.normal_vector.plus(vector_to_add)
-        plane_to_be_added_to.constant_term = plane_to_be_added_to.constant_term + constant_to_add
+        # Replace equation 2 with the result
+        self.planes[row_to_be_added_to] = Plane(result_vector, result_constant)
 
 
     def indices_of_first_nonzero_terms_in_each_row(self):
