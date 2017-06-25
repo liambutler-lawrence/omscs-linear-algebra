@@ -67,17 +67,11 @@ print mgep_3_a.intersection_with_arr([mgep_3_b, mgep_3_c])
 
 def test(i, system, expression):
     print
-    print 'BEFORE test {}: {}'.format(i, system)
-    print
 
     if expression():
-        print 'test case {} passed'.format(i)
+        print 'test case {} PASSED: {}'.format(i, system)
     else:
-        print 'test case {} failed'.format(i)
-
-    print
-    print 'AFTER test {}: {}'.format(i, system)
-    print
+        print 'test case {} FAILED: {}'.format(i, system)
 
 
 print_quiz('Coding Row Operations')
@@ -150,24 +144,26 @@ ctf_4_a = Plane(normal_vector=Vector(['0','1','1']), constant_term='1')
 ctf_4_b = Plane(normal_vector=Vector(['1','-1','1']), constant_term='2')
 ctf_4_c = Plane(normal_vector=Vector(['1','2','-5']), constant_term='3')
 
-ctf_1_s = LinearSystem([ctf_1_a, ctf_1_b]).compute_triangular_form()
-test(1, ctf_1_s, (lambda: t[0] == p1 and
-                          t[1] == p2))
+print_question('Test Cases')
 
-ctf_2_s = LinearSystem([ctf_2_a, ctf_2_b]).compute_triangular_form()
-test(2, ctf_2_s, (lambda: t[0] == p1 and
-                          t[1] == Plane(constant_term='1')))
+ctf_s = LinearSystem([ctf_1_a, ctf_1_b]).compute_triangular_form()
+test(1, ctf_s, (lambda: ctf_s[0] == ctf_1_a and
+                        ctf_s[1] == ctf_1_b))
 
-ctf_3_s = LinearSystem([ctf_3_a, ctf_3_b, ctf_3_c, ctf_3_d]).compute_triangular_form()
-test(3, ctf_3_s, (lambda: t[0] == p1 and
-                          t[1] == p2 and
-                          t[2] == Plane(normal_vector=Vector(['0','0','-2']), constant_term='2') and
-                          t[3] == Plane()))
+ctf_s = LinearSystem([ctf_2_a, ctf_2_b]).compute_triangular_form()
+test(2, ctf_s, (lambda: ctf_s[0] == ctf_2_a and
+                        ctf_s[1] == Plane(constant_term='1')))
 
-ctf_4_s = LinearSystem([ctf_4_a, ctf_4_b, ctf_4_c]).compute_triangular_form()
-test(4, ctf_4_s, (lambda: t[0] == Plane(normal_vector=Vector(['1','-1','1']), constant_term='2') and
-                          t[1] == Plane(normal_vector=Vector(['0','1','1']), constant_term='1') and
-                          t[2] == Plane(normal_vector=Vector(['0','0','-9']), constant_term='-2')))
+ctf_s = LinearSystem([ctf_3_a, ctf_3_b, ctf_3_c, ctf_3_d]).compute_triangular_form()
+test(3, ctf_s, (lambda: ctf_s[0] == ctf_3_a and
+                        ctf_s[1] == ctf_3_b and
+                        ctf_s[2] == Plane(normal_vector=Vector(['0','0','-2']), constant_term='2') and
+                        ctf_s[3] == Plane()))
+
+ctf_s = LinearSystem([ctf_4_a, ctf_4_b, ctf_4_c]).compute_triangular_form()
+test(4, ctf_s, (lambda: ctf_s[0] == Plane(normal_vector=Vector(['1','-1','1']), constant_term='2') and
+                        ctf_s[1] == Plane(normal_vector=Vector(['0','1','1']), constant_term='1') and
+                        ctf_s[2] == Plane(normal_vector=Vector(['0','0','-9']), constant_term='-2')))
 
 
 print_info('END')

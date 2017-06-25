@@ -110,6 +110,9 @@ class Plane(object):
         if not self.is_parallel_to(p):
             return False
 
+        if self.basepoint is None and p.basepoint is None:
+            return True
+
         link = self.basepoint.minus(p.basepoint)
         return link.is_orthogonal_to(self.normal_vector)
 

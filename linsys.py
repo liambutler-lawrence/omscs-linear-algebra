@@ -75,6 +75,31 @@ class LinearSystem(object):
         return indices
 
 
+    def compute_triangular_form(self):
+        result_system = deepcopy(self)
+
+        num_equations = len(result_system)
+        num_variables = result_system.dimension
+
+        first_nonzeros = result_system.indices_of_first_nonzero_terms_in_each_row()
+
+        for i in range(num_variables):
+            for j in range(i+1, num_equations):
+
+                if first_nonzeros[i] > i and first_nonzeros[j] <= i:
+                    result_system.swap_rows(i, j)
+                    first_nonzeros[i], first_nonzeros[j] = first_nonzeros[j], first_nonzeros[i]
+
+                cancel_first_term = result_system[i].normal_vector.coordinates[i]
+
+                cancel_second_term = result_system[j].normal_vector.coordinates[i]
+                cancel_scalar = -1 * cancel_second_term / cancel_first_term
+
+                result_system.add_multiple_times_row_to_row(cancel_scalar, i, j)
+
+        return result_system
+
+
     def __len__(self):
         return len(self.planes)
 
