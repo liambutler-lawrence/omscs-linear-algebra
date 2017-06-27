@@ -75,49 +75,6 @@ class LinearSystem(object):
         return indices
 
 
-    def compute_triangular_form_old(self):
-        result_system = deepcopy(self)
-
-        num_equations = len(result_system)
-        num_variables = result_system.dimension
-        
-        print '\n\nPRE: {} EQUATIONS'.format(num_equations)
-
-        first_nonzero_vars = result_system.indices_of_first_nonzero_terms_in_each_row()
-
-        for current_var in range(num_variables):
-            current_eq = current_var
-            
-            print 'BEGIN EQUATION {}  (var is {})'.format(current_eq, current_var)
-
-            
-            for eq_non_zero_current_var in range(current_eq + 1, num_equations):
-                if first_nonzero_vars[current_eq] > current_var:
-                    print 'BEGIN SEARCH FOR EQUATION TO SWAP FOR {}  (var is {})'.format(current_eq, current_var)
-
-                    if first_nonzero_vars[eq_non_zero_current_var] <= current_var:
-                        print 'BEGIN SWAP EQUATION {} for {}  (var is {})'.format(eq_non_zero_current_var, current_eq, current_var)
-                        result_system.swap_rows(current_eq, eq_non_zero_current_var)
-                        first_nonzero_vars[current_eq], first_nonzero_vars[eq_non_zero_current_var] = first_nonzero_vars[eq_non_zero_current_var], first_nonzero_vars[current_eq]
-                        break
-                else:
-                    break
-            
-            for eq_to_be_cancel in range(current_eq + 1, num_equations):
-            
-                coe_to_do_cancel = result_system[current_eq].normal_vector.coordinates[current_var]
-                if coe_to_do_cancel == 0:
-                    break
-
-                print 'BEGIN CANCEL EQUATION {} WITH {}  (var is {})'.format(eq_to_be_cancel, current_eq, current_var)
-                coe_to_be_cancel = result_system[eq_to_be_cancel].normal_vector.coordinates[current_var]
-                
-                cancel_scalar = coe_to_be_cancel / coe_to_do_cancel * -1
-                result_system.add_multiple_times_row_to_row(cancel_scalar, current_var, eq_to_be_cancel)
-
-        return result_system
-
-
     def compute_triangular_form(self):
         result_system = deepcopy(self)
 
@@ -125,33 +82,27 @@ class LinearSystem(object):
         num_variables = result_system.dimension
 
         current_var = 0
-        
-        print '\n\nPRE: {} EQUATIONS'.format(num_equations)
 
         for current_eq in range(num_equations):
-        
-            print 'BEGIN EQUATION {}  (var is {})'.format(current_eq, current_var)
+
             while current_var < num_variables:
                 coe_to_do_cancel = result_system[current_eq].normal_vector.coordinates[current_var]
-                
+
                 if coe_to_do_cancel == 0:
-                    print 'BEGIN SEARCH FOR EQUATION TO SWAP FOR {}  (var is {})'.format(current_eq, current_var)
                     first_nonzero_vars = result_system.indices_of_first_nonzero_terms_in_each_row()
+
                     for eq_non_zero_current_var in range(current_eq + 1, num_equations):
-                    
+
                         if first_nonzero_vars[eq_non_zero_current_var] <= current_var:
-                            print 'BEGIN SWAP EQUATION {} for {}  (var is {})'.format(eq_non_zero_current_var, current_eq, current_var)
                             result_system.swap_rows(current_eq, eq_non_zero_current_var)
                             coe_to_do_cancel = result_system[current_eq].normal_vector.coordinates[current_var]
                             break
 
                     if coe_to_do_cancel == 0:
-                        print 'SEARCH FAILED FOR EQUATION TO SWAP FOR {}  (var is {})'.format(current_eq, current_var)
                         current_var += 1
                         continue
 
                 for eq_to_be_cancel in range(current_eq + 1, num_equations):
-                    print 'BEGIN CANCEL EQUATION {} WITH {}  (var is {})'.format(eq_to_be_cancel, current_eq, current_var)
                     coe_to_be_cancel = result_system[eq_to_be_cancel].normal_vector.coordinates[current_var]
 
                     cancel_scalar = coe_to_be_cancel / coe_to_do_cancel * -1
