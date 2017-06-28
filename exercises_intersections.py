@@ -183,7 +183,6 @@ crref_4_a = Plane(normal_vector=Vector(['0','1','1']), constant_term='1')
 crref_4_b = Plane(normal_vector=Vector(['1','-1','1']), constant_term='2')
 crref_4_c = Plane(normal_vector=Vector(['1','2','-5']), constant_term='3')
 
-
 print_question('Test Cases')
 
 crref_1_s = LinearSystem([crref_1_a, crref_1_b]).compute_rref()
@@ -195,15 +194,15 @@ test(2, crref_2_s, (lambda: crref_1_s[0] == crref_2_a and
                             crref_1_s[1] == Plane(constant_term='1')))
                           
 crref_3_s = LinearSystem([crref_3_a, crref_3_b, crref_3_c, crref_3_d]).compute_rref()
-test(3, crref_3_s, (lambda: crref_3_a[0] == Plane(normal_vector=Vector(['1','0','0']), constant_term='0') and
-                            crref_3_b[1] == p2 and
-                            crref_3_c[2] == Plane(normal_vector=Vector(['0','0','-2']), constant_term='2') and
-                            crref_3_d[3] == Plane()):
+test(3, crref_3_s, (lambda: crref_3_s[0] == Plane(normal_vector=Vector(['1','0','0']), constant_term='0') and
+                            crref_3_s[1] == crref_3_b and
+                            crref_3_s[2] == Plane(normal_vector=Vector(['0','0','-2']), constant_term='2') and
+                            crref_3_s[3] == Plane()))
 
 crref_4_s = LinearSystem([crref_4_a, crref_4_b, crref_4_c]).compute_rref()
-test(4, crref_4_s, (lambda: crref_4_a[0] == Plane(normal_vector=Vector(['1','0','0']), constant_term=Decimal('23')/Decimal('9')) and
-                            crref_4_b[1] == Plane(normal_vector=Vector(['0','1','0']), constant_term=Decimal('7')/Decimal('9')) and
-                            crref_4_c[2] == Plane(normal_vector=Vector(['0','0','1']), constant_term=Decimal('2')/Decimal('9'))):
+test(4, crref_4_s, (lambda: crref_4_s[0] == Plane(normal_vector=Vector(['1','0','0']), constant_term=Decimal('23')/Decimal('9')) and
+                            crref_4_s[1] == Plane(normal_vector=Vector(['0','1','0']), constant_term=Decimal('7')/Decimal('9')) and
+                            crref_4_s[2] == Plane(normal_vector=Vector(['0','0','1']), constant_term=Decimal('2')/Decimal('9'))))
 
 
 print_info('END')
