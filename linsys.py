@@ -14,6 +14,7 @@ class LinearSystem(object):
     ALL_PLANES_MUST_BE_IN_SAME_DIM_MSG = 'All planes in the system should live in the same dimension'
     NO_SOLUTIONS_MSG = 'No solutions'
     INF_SOLUTIONS_MSG = 'Infinitely many solutions'
+    NO_NONZERO_EQS_BELOW_MSG = 'No equations below specified row have a non-zero coefficient for the specified variable'
 
 
     def __init__(self, planes):
@@ -86,32 +87,47 @@ class LinearSystem(object):
         for current_eq in range(num_equations):
 
             while current_var < num_variables:
-                coe_to_do_cancel = result_system[current_eq].normal_vector.coordinates[current_var]
+                coe_to_do_cancel = MyDecimal(result_system[current_eq].normal_vector.coordinates[current_var])
 
-                if coe_to_do_cancel == 0:
-                    first_nonzero_vars = result_system.indices_of_first_nonzero_terms_in_each_row()
+                if coe_to_do_cancel.is_near_zero():
+                    try:
+                        result_system.swap_for_next_eq_with_nonzero_coe(current_eq, current_var)
 
-                    for eq_non_zero_current_var in range(current_eq + 1, num_equations):
+                    except Exception as e:
+                        if str(e) == self.NO_NONZERO_EQS_BELOW_MSG:
+                            current_var += 1
+                            continue
 
-                        if first_nonzero_vars[eq_non_zero_current_var] <= current_var:
-                            result_system.swap_rows(current_eq, eq_non_zero_current_var)
-                            coe_to_do_cancel = result_system[current_eq].normal_vector.coordinates[current_var]
-                            break
-
-                    if coe_to_do_cancel == 0:
-                        current_var += 1
-                        continue
-
-                for eq_to_be_cancel in range(current_eq + 1, num_equations):
-                    coe_to_be_cancel = result_system[eq_to_be_cancel].normal_vector.coordinates[current_var]
-
-                    cancel_scalar = coe_to_be_cancel / coe_to_do_cancel * -1
-                    result_system.add_multiple_times_row_to_row(cancel_scalar, current_eq, eq_to_be_cancel)
+                result_system.clear_coe_in_remaining_eqs(current_eq, current_var)
 
                 current_var += 1
                 break
 
         return result_system
+
+
+    def swap_for_next_eq_with_nonzero_coe(self, eq_to_swap, var_with_zero_coe):
+        num_equations = len(self)
+        first_nonzero_vars = self.indices_of_first_nonzero_terms_in_each_row()
+
+        for current_eq in range(eq_to_swap + 1, num_equations):
+
+            if first_nonzero_vars[current_eq] <= var_with_zero_coe:
+                self.swap_rows(eq_to_swap, current_eq)
+                return
+
+        raise Exception(self.NO_NONZERO_EQS_BELOW_MSG)
+
+
+    def clear_coe_in_remaining_eqs(self, eq_to_do_clearing, var_to_clear):
+        num_equations = len(self)
+        coe_to_do_clearing = self[eq_to_do_clearing].normal_vector.coordinates[var_to_clear]
+
+        for eq_to_be_cleared in range(eq_to_do_clearing + 1, num_equations):
+            coe_to_be_cleared = self[eq_to_be_cleared].normal_vector.coordinates[var_to_clear]
+
+            scalar_to_do_clearing = coe_to_be_cleared / coe_to_do_clearing * -1
+            self.add_multiple_times_row_to_row(scalar_to_do_clearing, eq_to_do_clearing, eq_to_be_cleared)
 
 
     def __len__(self):
