@@ -76,6 +76,20 @@ class LinearSystem(object):
         return indices
 
 
+    def compute_rref(self):
+        result_system = self.compute_triangular_form()
+        
+        num_equations = len(result_system)
+        current_var = result_system.dimension - 1
+        
+        for current_eq in reversed(range(num_equations)):
+            
+            result_system.clear_coe_in_preceding_eqs(current_eq, current_var)
+            current_var -= 1
+            
+        return result_system
+
+
     def compute_triangular_form(self):
         result_system = deepcopy(self)
 
@@ -124,6 +138,16 @@ class LinearSystem(object):
         coe_to_do_clearing = self[eq_to_do_clearing].normal_vector.coordinates[var_to_clear]
 
         for eq_to_be_cleared in range(eq_to_do_clearing + 1, num_equations):
+            coe_to_be_cleared = self[eq_to_be_cleared].normal_vector.coordinates[var_to_clear]
+
+            scalar_to_do_clearing = coe_to_be_cleared / coe_to_do_clearing * -1
+            self.add_multiple_times_row_to_row(scalar_to_do_clearing, eq_to_do_clearing, eq_to_be_cleared)
+
+
+    def clear_coe_in_preceding_eqs(self, eq_to_do_clearing, var_to_clear):
+        coe_to_do_clearing = self[eq_to_do_clearing].normal_vector.coordinates[var_to_clear]
+
+        for eq_to_be_cleared in reversed(range(eq_to_do_clearing)):
             coe_to_be_cleared = self[eq_to_be_cleared].normal_vector.coordinates[var_to_clear]
 
             scalar_to_do_clearing = coe_to_be_cleared / coe_to_do_clearing * -1
