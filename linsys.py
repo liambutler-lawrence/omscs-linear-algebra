@@ -82,24 +82,25 @@ class LinearSystem(object):
         num_equations = len(result_system)
         num_variables = result_system.dimension
 
-        current_var = num_variables - 1
-        current_eq = num_equations - 1
+        first_nonzero_vars = result_system.indices_of_first_nonzero_terms_in_each_row()
 
-        while current_eq >= 0 and current_var >= 0:
-            current_coe = MyDecimal(result_system[current_eq].normal_vector.coordinates[current_var])
+        for current_eq in reversed(range(num_equations)):
 
-            if current_coe.is_near_zero():
-                current_eq -= 1
+            first_nonzero_var = first_nonzero_vars[current_eq]
+            if first_nonzero_var == -1:
                 continue
 
-            result_system.clear_coe_in_preceding_eqs(current_eq, current_var)
-
-            inverted_current_coe = Decimal('1') / current_coe
-            result_system.multiply_coefficient_and_row(inverted_current_coe, current_eq)
-
-            current_var -= 1
+            result_system.scale_eq_for_coe_of_pivot_var(current_eq, first_nonzero_var)
+            result_system.clear_coe_in_preceding_eqs(current_eq, first_nonzero_var)
 
         return result_system
+
+
+    def scale_eq_for_coe_of_pivot_var(self, eq_to_scale, pivot_var):
+        pivot_var_coe = self[eq_to_scale].normal_vector.coordinates[pivot_var]
+        pivot_var_inverted_coe = Decimal('1') / pivot_var_coe
+        
+        self.multiply_coefficient_and_row(pivot_var_inverted_coe, eq_to_scale)
 
 
     def compute_triangular_form(self):
