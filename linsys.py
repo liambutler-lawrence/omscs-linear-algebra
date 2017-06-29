@@ -82,21 +82,21 @@ class LinearSystem(object):
         num_equations = len(result_system)
         num_variables = result_system.dimension
 
-        first_nonzero_vars = result_system.indices_of_first_nonzero_terms_in_each_row()
+        pivot_vars = result_system.indices_of_first_nonzero_terms_in_each_row()
 
         for current_eq in reversed(range(num_equations)):
 
-            first_nonzero_var = first_nonzero_vars[current_eq]
-            if first_nonzero_var == -1:
+            pivot_var = pivot_vars[current_eq]
+            if pivot_var < 0:
                 continue
 
-            result_system.scale_eq_for_coe_of_pivot_var(current_eq, first_nonzero_var)
-            result_system.clear_coe_in_preceding_eqs(current_eq, first_nonzero_var)
+            result_system.scale_eq_to_make_coe_equal_one(current_eq, pivot_var)
+            result_system.clear_coe_in_preceding_eqs(current_eq, pivot_var)
 
         return result_system
 
 
-    def scale_eq_for_coe_of_pivot_var(self, eq_to_scale, pivot_var):
+    def scale_eq_to_make_coe_equal_one(self, eq_to_scale, pivot_var):
         pivot_var_coe = self[eq_to_scale].normal_vector.coordinates[pivot_var]
         pivot_var_inverted_coe = Decimal('1') / pivot_var_coe
         
