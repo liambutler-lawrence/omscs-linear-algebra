@@ -80,13 +80,25 @@ class LinearSystem(object):
         result_system = self.compute_triangular_form()
         
         num_equations = len(result_system)
-        current_var = result_system.dimension - 1
-        
-        for current_eq in reversed(range(num_equations)):
-            
+        num_variables = result_system.dimension
+
+        current_var = num_variables - 1
+        current_eq = num_equations - 1
+
+        while current_eq >= 0 and current_var >= 0:
+            current_coe = MyDecimal(result_system[current_eq].normal_vector.coordinates[current_var])
+
+            if current_coe.is_near_zero():
+                current_eq -= 1
+                continue
+
             result_system.clear_coe_in_preceding_eqs(current_eq, current_var)
+
+            inverted_current_coe = Decimal('1') / current_coe
+            result_system.multiply_coefficient_and_row(inverted_current_coe, current_eq)
+
             current_var -= 1
-            
+
         return result_system
 
 
@@ -101,9 +113,9 @@ class LinearSystem(object):
         for current_eq in range(num_equations):
 
             while current_var < num_variables:
-                coe_to_do_cancel = MyDecimal(result_system[current_eq].normal_vector.coordinates[current_var])
+                current_coe = MyDecimal(result_system[current_eq].normal_vector.coordinates[current_var])
 
-                if coe_to_do_cancel.is_near_zero():
+                if current_coe.is_near_zero():
                     try:
                         result_system.swap_for_next_eq_with_nonzero_coe(current_eq, current_var)
 

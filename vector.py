@@ -33,7 +33,10 @@ class Vector(object):
 
 
     def __eq__(self, v):
-        return self.coordinates == v.coordinates
+        coordinate_pairs = zip(self.coordinates, v.coordinates)
+        coordinate_pair_equality = [MyDecimal(x-y).is_near_zero() for x,y in coordinate_pairs]
+
+        return reduce((lambda a,b: a and b), coordinate_pair_equality)
 
 
     def magnitude(self):
@@ -165,3 +168,8 @@ class Vector(object):
                 raise Exception(self.CANNOT_FIND_UNIQUE_ORTHOGONAL_COMPONENT_MSG)
             else:
                 raise e
+
+
+class MyDecimal(Decimal):
+    def is_near_zero(self, eps=1e-10):
+        return abs(self) < eps

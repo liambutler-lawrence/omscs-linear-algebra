@@ -190,8 +190,8 @@ test(1, crref_1_s, (lambda: crref_1_s[0] == Plane(normal_vector=Vector(['1','0',
                             crref_1_s[1] == crref_1_b))
 
 crref_2_s = LinearSystem([crref_2_a, crref_2_b]).compute_rref()
-test(2, crref_2_s, (lambda: crref_1_s[0] == crref_2_a and
-                            crref_1_s[1] == Plane(constant_term='1')))
+test(2, crref_2_s, (lambda: crref_2_s[0] == crref_2_a and
+                            crref_2_s[1] == Plane(constant_term='1')))
                           
 crref_3_s = LinearSystem([crref_3_a, crref_3_b, crref_3_c, crref_3_d]).compute_rref()
 test(3, crref_3_s, (lambda: crref_3_s[0] == Plane(normal_vector=Vector(['1','0','0']), constant_term='0') and
