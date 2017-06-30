@@ -177,24 +177,24 @@ class LinearSystem(object):
         result_vector = []
 
         for current_eq in range(num_equations):
+            current_eq_constant = rref[current_eq].constant_term
+
             while current_var < num_variables:
-
                 current_var_coe = rref[current_eq].normal_vector.coordinates[current_var]
-                current_eq_constant = rref[current_eq].constant_term
-
-                if MyDecimal(current_var_coe).is_near_zero():
-                    if MyDecimal(current_eq_constant).is_near_zero():
-                        current_var += 1
-                        continue
-                    else:
-                        return None
-
-                result_vector.append(current_eq_constant)
                 current_var += 1
-                break
 
-        if len(result_vector) != rref.dimension:
-            return Plane()
+                if not MyDecimal(current_var_coe).is_near_zero():
+                    result_vector.append(current_eq_constant)
+                    break
+
+            else:
+                # This equation has all zero coefficients.
+                # If it has a non-zero constant, the system is inconsistent.
+                if not MyDecimal(current_eq_constant).is_near_zero():
+                    return None
+
+        if len(result_vector) < rref.dimension:
+            return "INFINITE SOLUTIONS"
 
         return Vector(result_vector)
 
