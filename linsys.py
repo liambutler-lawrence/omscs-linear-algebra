@@ -167,6 +167,38 @@ class LinearSystem(object):
             self.add_multiple_times_row_to_row(scalar_to_do_clearing, eq_to_do_clearing, eq_to_be_cleared)
 
 
+    def compute_solution_using_gaussian_elimination(self):
+        rref = self.compute_rref()
+
+        num_equations = len(rref)
+        num_variables = rref.dimension
+
+        current_var = 0
+        result_vector = []
+
+        for current_eq in range(num_equations):
+            while current_var < num_variables:
+
+                current_var_coe = rref[current_eq].normal_vector.coordinates[current_var]
+                current_eq_constant = rref[current_eq].constant_term
+
+                if MyDecimal(current_var_coe).is_near_zero():
+                    if MyDecimal(current_eq_constant).is_near_zero():
+                        current_var += 1
+                        continue
+                    else:
+                        return None
+
+                result_vector.append(current_eq_constant)
+                current_var += 1
+                break
+
+        if len(result_vector) != rref.dimension:
+            return Plane()
+
+        return Vector(result_vector)
+
+
     def __len__(self):
         return len(self.planes)
 

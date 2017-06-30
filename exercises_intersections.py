@@ -205,4 +205,28 @@ test(4, crref_4_s, (lambda: crref_4_s[0] == Plane(normal_vector=Vector(['1','0',
                             crref_4_s[2] == Plane(normal_vector=Vector(['0','0','1']), constant_term=Decimal('2')/Decimal('9'))))
 
 
+print_quiz('Coding GE Solution')
+
+cges_1_a = Plane(normal_vector=Vector(['5.862','1.178','-10.366']), constant_term='-8.15')
+cges_1_b = Plane(normal_vector=Vector(['-2.931','-0.589','5.183']), constant_term='-4.075')
+
+cges_2_a = Plane(normal_vector=Vector(['8.631','5.112','-1.816']), constant_term='-5.133')
+cges_2_b = Plane(normal_vector=Vector(['4.315','11.132','-5.27']), constant_term='-6.795')
+cges_2_c = Plane(normal_vector=Vector(['-2.158','3.01','-1.727']), constant_term='-0.831')
+
+cges_3_a = Plane(normal_vector=Vector(['5.262','2.739','-9.878']), constant_term='-3.441')
+cges_3_b = Plane(normal_vector=Vector(['5.111','6.358','7.638']), constant_term='-2.152')
+cges_3_c = Plane(normal_vector=Vector(['2.016','-9.924','-1.367']), constant_term='-9.278')
+cges_3_d = Plane(normal_vector=Vector(['2.167','-13.543','-18.883']), constant_term='-10.567')
+
+print_question('1')
+print LinearSystem([cges_1_a, cges_1_b]).compute_solution_using_gaussian_elimination()
+
+print_question('2')
+print LinearSystem([cges_2_a, cges_2_b, cges_2_c]).compute_solution_using_gaussian_elimination()
+
+print_question('3')
+print LinearSystem([cges_3_a, cges_3_b, cges_3_c, cges_3_d]).compute_solution_using_gaussian_elimination()
+
+
 print_info('END')
