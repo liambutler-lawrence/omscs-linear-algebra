@@ -124,6 +124,8 @@ class LinearSystem(object):
                         if str(e) == self.NO_NONZERO_EQS_BELOW_MSG:
                             current_var += 1
                             continue
+                        else:
+                            raise e
 
                 result_system.clear_coe_in_remaining_eqs(current_eq, current_var)
 
@@ -138,8 +140,11 @@ class LinearSystem(object):
         first_nonzero_vars = self.indices_of_first_nonzero_terms_in_each_row()
 
         for current_eq in range(eq_to_swap + 1, num_equations):
+            current_eq_first_nonzero_var = first_nonzero_vars[current_eq]
 
-            if first_nonzero_vars[current_eq] <= var_with_zero_coe:
+            # If current_eq_first_nonzero_var is less than 0...
+            # ...then there are no variables with non-zero coefficients in this equation.
+            if 0 <= current_eq_first_nonzero_var and current_eq_first_nonzero_var <= var_with_zero_coe:
                 self.swap_rows(eq_to_swap, current_eq)
                 return
 
