@@ -24,3 +24,12 @@ class Parametrization(object):
 
         except AssertionError:
             raise Exception(self.BASEPT_AND_DIR_VECTORS_MUST_BE_IN_SAME_DIM_MSG)
+
+
+    def __str__(self):
+        summary = 'Parametrization:'
+        basepoint = 'Basepoint: {}'.format(self.basepoint)
+        direction_vectors = ['Direction Vector {}: {}'.format(i+1, v) for i,v in enumerate(self.direction_vectors)]
+        
+        description = '\n'.join([summary, basepoint] + direction_vectors)
+        return description

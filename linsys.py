@@ -3,6 +3,7 @@ from copy import deepcopy
 
 from vector import Vector
 from plane import Plane
+from parametrization import Parametrization
 
 
 getcontext().prec = 30
@@ -199,9 +200,21 @@ class LinearSystem(object):
                     return None
 
         if len(result_vector) < rref.dimension:
-            return "INFINITE SOLUTIONS"
+            return rref.compute_parametrization()
 
         return Vector(result_vector)
+
+
+    def compute_parametrization(self):
+        basepoint = [p.constant_term for p in self.planes]
+        equation_vectors = [p.normal_vector.coordinates for p in self.planes]
+        
+        direction_vectors = [Vector(v) for v in zip(*equation_vectors)]
+        
+        # need to remove/zero out the vectors that contain pivot vars only
+        # need to replace 0s with 1s in the "valid" direction vectors
+        
+        return Parametrization(Vector(basepoint), direction_vectors)
 
 
     def __len__(self):
