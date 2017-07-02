@@ -206,15 +206,22 @@ class LinearSystem(object):
 
 
     def compute_parametrization(self):
-        basepoint = [p.constant_term for p in self.planes]
-        equation_vectors = [p.normal_vector.coordinates for p in self.planes]
-        
-        direction_vectors = [Vector(v) for v in zip(*equation_vectors)]
-        
-        # need to remove/zero out the vectors that contain pivot vars only
-        # need to replace 0s with 1s in the "valid" direction vectors
-        
-        return Parametrization(Vector(basepoint), direction_vectors)
+        list_contains = (lambda list, element: list.count(element) > 0)
+
+        rows = [p for p in self.planes if not reduce((lambda a,b: a and b), [MyDecimal(x).is_near_zero() for x in p.normal_vector.coordinates])]
+
+        basepoint = Vector([p.constant_term for p in rows])
+        rows_coords = [[x * Decimal('-1') for x in p.normal_vector.coordinates] for p in rows]
+
+        columns = [Vector(v) for v in zip(*rows_coords)]
+
+        pivot_columns = [i for i in self.indices_of_first_nonzero_terms_in_each_row() if i >= 0]
+
+        direction_vectors = [column if not list_contains(pivot_columns, column_index) else Vector(['0'] * basepoint.dimension) for column_index, column in enumerate(columns)]
+
+        # "fill out" missing coordinates in direction vectors (for rows for non-pivot variables)
+
+        return Parametrization(basepoint, direction_vectors)
 
 
     def __len__(self):
