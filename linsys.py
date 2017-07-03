@@ -208,21 +208,30 @@ class LinearSystem(object):
     def compute_parametrization(self):
         list_contains = (lambda list, element: list.count(element) > 0)
         list_contains_all_zeros = (lambda list: reduce((lambda a,b: a and b), [MyDecimal(x).is_near_zero() for x in list]))
-        
+
+        # Get list of all equations that are not redundant. This translates to one equation for each pivot var.
         rows = [p for p in self.planes if not list_contains_all_zeros(p.normal_vector.coordinates)]
 
+        # Get list of pivot var positions 
         pivot_columns = [i for i in self.indices_of_first_nonzero_terms_in_each_row() if i >= 0]
+
+        # Get list of free var positions
         all_columns = range(self.dimension)
         free_columns = set(all_columns).difference(set(pivot_columns))
 
+        # Fill out list of equations with one new equation for each free var.
         for i in free_columns:
             rows.insert(i, Plane(Vector(['-1'] * self.dimension), '0'))
 
+        # Get basepoint vector by slicing the constant term from each equation
         basepoint = Vector([p.constant_term for p in rows])
-        rows_coords = [[x * Decimal('-1') for x in p.normal_vector.coordinates] for p in rows]
 
+        # Get direction vectors by slicing "vertically" through the equation list
+        rows_coords = [[x * Decimal('-1') for x in p.normal_vector.coordinates] for p in rows]
         columns = [Vector(v) for v in zip(*rows_coords)]
-        direction_vectors = [column if not list_contains(pivot_columns, column_index) else Vector(['0'] * self.dimension) for column_index, column in enumerate(columns)]
+
+        # Remove direction vectors at pivot var positions
+        direction_vectors = [column for column_index, column in enumerate(columns) if not list_contains(pivot_columns, column_index)]
 
         return Parametrization(basepoint, direction_vectors)
 
