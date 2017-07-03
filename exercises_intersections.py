@@ -243,7 +243,7 @@ cp_3_b = Plane(normal_vector=Vector(['0.187','0.352','-1.873']), constant_term='
 cp_3_c = Plane(normal_vector=Vector(['0.374','0.704','-3.746']), constant_term='-3.982')
 cp_3_d = Plane(normal_vector=Vector(['-0.561','-1.056','5.619']), constant_term='5.973')
 
-print_question('1')
+print_question('1') # Input is incorrect for this exercise
 print LinearSystem([cp_1_a, cp_1_b]).compute_solution_using_gaussian_elimination()
 
 print_question('2')

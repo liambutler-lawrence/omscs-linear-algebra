@@ -207,19 +207,22 @@ class LinearSystem(object):
 
     def compute_parametrization(self):
         list_contains = (lambda list, element: list.count(element) > 0)
+        list_contains_all_zeros = (lambda list: reduce((lambda a,b: a and b), [MyDecimal(x).is_near_zero() for x in list]))
+        
+        rows = [p for p in self.planes if not list_contains_all_zeros(p.normal_vector.coordinates)]
 
-        rows = [p for p in self.planes if not reduce((lambda a,b: a and b), [MyDecimal(x).is_near_zero() for x in p.normal_vector.coordinates])]
+        pivot_columns = [i for i in self.indices_of_first_nonzero_terms_in_each_row() if i >= 0]
+        all_columns = range(self.dimension)
+        free_columns = set(all_columns).difference(set(pivot_columns))
+
+        for i in free_columns:
+            rows.insert(i, Plane(Vector(['-1'] * self.dimension), '0'))
 
         basepoint = Vector([p.constant_term for p in rows])
         rows_coords = [[x * Decimal('-1') for x in p.normal_vector.coordinates] for p in rows]
 
         columns = [Vector(v) for v in zip(*rows_coords)]
-
-        pivot_columns = [i for i in self.indices_of_first_nonzero_terms_in_each_row() if i >= 0]
-
-        direction_vectors = [column if not list_contains(pivot_columns, column_index) else Vector(['0'] * basepoint.dimension) for column_index, column in enumerate(columns)]
-
-        # "fill out" missing coordinates in direction vectors (for rows for non-pivot variables)
+        direction_vectors = [column if not list_contains(pivot_columns, column_index) else Vector(['0'] * self.dimension) for column_index, column in enumerate(columns)]
 
         return Parametrization(basepoint, direction_vectors)
 
