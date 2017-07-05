@@ -213,15 +213,16 @@ class LinearSystem(object):
         rows = [p for p in self.planes if not list_contains_all_zeros(p.normal_vector.coordinates)]
 
         # Get list of pivot var positions 
-        pivot_columns = [i for i in self.indices_of_first_nonzero_terms_in_each_row() if i >= 0]
+        pivot_vars = [i for i in self.indices_of_first_nonzero_terms_in_each_row() if i >= 0]
 
         # Get list of free var positions
-        all_columns = range(self.dimension)
-        free_columns = set(all_columns).difference(set(pivot_columns))
+        all_vars = range(self.dimension)
+        free_vars = set(all_vars).difference(set(pivot_vars))
 
-        # Fill out list of equations with one new equation for each free var.
-        for i in free_columns:
-            rows.insert(i, Plane(Vector(['-1'] * self.dimension), '0'))
+        # Fill out list of equations by inserting an 'x - x = 0' equation for each free var
+        for free_var_position in free_vars:
+            normal_vector = ['-1' if i == free_var_position else '0' for i in all_vars]
+            rows.insert(free_var_position, Plane(Vector(normal_vector), '0'))
 
         # Get basepoint vector by slicing the constant term from each equation
         basepoint = Vector([p.constant_term for p in rows])
@@ -231,7 +232,7 @@ class LinearSystem(object):
         columns = [Vector(v) for v in zip(*rows_coords)]
 
         # Remove direction vectors at pivot var positions
-        direction_vectors = [column for column_index, column in enumerate(columns) if not list_contains(pivot_columns, column_index)]
+        direction_vectors = [column for column_index, column in enumerate(columns) if not list_contains(pivot_vars, column_index)]
 
         return Parametrization(basepoint, direction_vectors)
 

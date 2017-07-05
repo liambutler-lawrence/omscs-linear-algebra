@@ -40,7 +40,7 @@ class Parametrization(object):
                 coefficient = vector.coordinates[current_var]
                 rounded_coefficient = round(coefficient, 3)
 
-                coefficient_term = '{} t_{}'.format(rounded_coefficient, vector_index)
+                coefficient_term = '{} t_{}'.format(rounded_coefficient, vector_index + 1)
                 equation_terms.append(coefficient_term)
 
             equation_right_side = ' + '.join(equation_terms)
