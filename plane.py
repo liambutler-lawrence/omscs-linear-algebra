@@ -11,7 +11,6 @@ class Plane(object):
 
 
     NO_NONZERO_ELTS_FOUND_MSG = 'No nonzero elements found'
-    SYSTEM_EQUATIONS_IS_INCONSISTENT_MSG = 'This system of equations is inconsistent'
 
 
     def __init__(self, normal_vector=None, constant_term=None):
