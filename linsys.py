@@ -176,53 +176,18 @@ class LinearSystem(object):
     def compute_solution_using_gaussian_elimination(self):
         rref = self.compute_rref()
 
-        num_equations = len(rref)
-        num_variables = rref.dimension
-
-        current_var = 0
-        result_vector = []
-
-        for current_eq in range(num_equations):
-            current_eq_constant = rref[current_eq].constant_term
-
-            while current_var < num_variables:
-                current_var_coe = rref[current_eq].normal_vector.coordinates[current_var]
-                current_var += 1
-
-                if not MyDecimal(current_var_coe).is_near_zero():
-                    result_vector.append(current_eq_constant)
-                    break
-
-            else:
-                # This equation has all zero coefficients.
-                # If it has a non-zero constant, the system is inconsistent.
-                if not MyDecimal(current_eq_constant).is_near_zero():
-                    return None
-
-        if len(result_vector) < rref.dimension:
-            return rref.compute_parametrization()
-
-        return Vector(result_vector)
-
-
-    def compute_parametrization(self):
         list_contains = (lambda list, element: list.count(element) > 0)
-        list_contains_all_zeros = (lambda list: reduce((lambda a,b: a and b), [MyDecimal(x).is_near_zero() for x in list]))
-
-        # Get list of all equations that are not redundant. This translates to one equation for each pivot var.
-        rows = [p for p in self.planes if not list_contains_all_zeros(p.normal_vector.coordinates)]
 
         # Get list of pivot var positions 
-        pivot_vars = [i for i in self.indices_of_first_nonzero_terms_in_each_row() if i >= 0]
+        pivot_vars = [i for i in rref.indices_of_first_nonzero_terms_in_each_row() if i >= 0]
 
-        # Get list of free var positions
-        all_vars = range(self.dimension)
-        free_vars = set(all_vars).difference(set(pivot_vars))
-
-        # Fill out list of equations by inserting an 'x - x = 0' equation for each free var
-        for free_var_position in free_vars:
-            normal_vector = ['-1' if i == free_var_position else '0' for i in all_vars]
-            rows.insert(free_var_position, Plane(Vector(normal_vector), '0'))
+        try:
+            rows = rref.compute_rows_for_parametrization(pivot_vars)
+        except Exception as e:
+            if str(e) == self.NO_SOLUTIONS_MSG:
+                return None
+            else:
+                raise e
 
         # Get basepoint vector by slicing the constant term from each equation
         basepoint = Vector([p.constant_term for p in rows])
@@ -235,6 +200,30 @@ class LinearSystem(object):
         direction_vectors = [column for column_index, column in enumerate(columns) if not list_contains(pivot_vars, column_index)]
 
         return Parametrization(basepoint, direction_vectors)
+
+
+    def compute_rows_for_parametrization(self, pivot_vars):
+        rows = deepcopy(self.planes)
+        list_contains_all_zeros = (lambda list: reduce((lambda a,b: a and b), [MyDecimal(x).is_near_zero() for x in list]))
+
+        # Get list of free var positions
+        all_vars = range(self.dimension)
+        free_vars = set(all_vars).difference(set(pivot_vars))
+
+        # Fill out list of equations by inserting an 'x - x = 0' equation for each free var
+        for free_var_position in free_vars:
+            normal_vector = ['-1' if i == free_var_position else '0' for i in all_vars]
+            rows.insert(free_var_position, Plane(Vector(normal_vector), '0'))
+
+        # Check each redundant (0 = 0) equation to make sure it is not an invalid (0 = k) equation 
+        for redundant_eq in rows[self.dimension:]:
+            is_lhs_zero = list_contains_all_zeros(redundant_eq.normal_vector.coordinates)
+            is_rhs_zero = MyDecimal(redundant_eq.constant_term).is_near_zero()
+
+            if is_lhs_zero and not is_rhs_zero:
+                raise Exception(self.NO_SOLUTIONS_MSG)
+
+        return rows[:self.dimension]
 
 
     def __len__(self):
