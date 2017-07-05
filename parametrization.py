@@ -27,9 +27,25 @@ class Parametrization(object):
 
 
     def __str__(self):
-        summary = 'Parametrization:'
-        basepoint = 'Basepoint: {}'.format(self.basepoint)
-        direction_vectors = ['Direction Vector {}: {}'.format(i+1, v) for i,v in enumerate(self.direction_vectors)]
-        
-        description = '\n'.join([summary, basepoint] + direction_vectors)
+        equations = ['Parametrization:']
+
+        for current_var in range(self.dimension):
+            constant = self.basepoint.coordinates[current_var]
+            rounded_constant = round(constant, 3)
+            
+            constant_term = '{}'.format(rounded_constant)
+            equation_terms = [constant_term]
+
+            for (vector_index, vector) in enumerate(self.direction_vectors):
+                coefficient = vector.coordinates[current_var]
+                rounded_coefficient = round(coefficient, 3)
+
+                coefficient_term = '{} t_{}'.format(rounded_coefficient, vector_index)
+                equation_terms.append(coefficient_term)
+
+            equation_right_side = ' + '.join(equation_terms)
+            current_equation = 'x_{} = {}'.format(current_var + 1, equation_right_side)
+            equations.append(current_equation)
+
+        description = '\n'.join(equations)
         return description
