@@ -1,7 +1,15 @@
+def print_lesson_begin(name):
+    print_info('BEGIN LESSON ' + name)
+
+
+def print_lesson_end(name):
+    print_info('END LESSON ' + name)
+
+
 def print_info(caption):
     print
     print
-    print caption + ' LINEAR ALGEBRA QUIZ LOG'
+    print caption
     print
 
 

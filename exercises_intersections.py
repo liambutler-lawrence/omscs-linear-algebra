@@ -4,7 +4,10 @@ from plane import *
 from linsys import *
 
 
-print_info('BEGIN')
+LESSON_INTERSECTIONS = 'Intersections'
+
+
+print_lesson_begin(LESSON_INTERSECTIONS)
 
 
 print_quiz('Coding Functions for Lines')
@@ -253,4 +256,4 @@ print_question('3')
 print LinearSystem([cp_3_a, cp_3_b, cp_3_c, cp_3_d]).compute_solution()
 
 
-print_info('END')
+print_lesson_end(LESSON_INTERSECTIONS)

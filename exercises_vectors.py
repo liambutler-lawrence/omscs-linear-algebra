@@ -2,7 +2,10 @@ from exercise_utilities import *
 from vector import Vector
 
 
-print_info('BEGIN')
+LESSON_VECTORS = 'Vectors'
+
+
+print_lesson_begin(LESSON_VECTORS)
 
 
 print_quiz('Plus, Minus, Scalar Multiply')
@@ -122,4 +125,4 @@ print_question('Area of Triangle')
 print Vector([1.5, 9.547, 3.691]).area_of_triangle_with(Vector([-6.007, 0.124, 5.772]))
 
 
-print_info('END')
+print_lesson_end(LESSON_VECTORS)
