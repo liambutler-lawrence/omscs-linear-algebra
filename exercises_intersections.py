@@ -232,7 +232,7 @@ print LinearSystem([cges_3_a, cges_3_b, cges_3_c, cges_3_d]).compute_solution()
 print_quiz('Coding Parametrization')
 
 cp_1_a = Plane(normal_vector=Vector(['0.786','0.786','0.588']), constant_term='-0.714')
-cp_1_b = Plane(normal_vector=Vector(['-0.138','-0.138','0.244']), constant_term='0.319')
+cp_1_b = Plane(normal_vector=Vector(['-0.131','-0.131','0.244']), constant_term='0.319')
 
 cp_2_a = Plane(normal_vector=Vector(['8.631','5.112','-1.816']), constant_term='-5.113')
 cp_2_b = Plane(normal_vector=Vector(['4.315','11.132','-5.27']), constant_term='-6.775')
@@ -243,7 +243,7 @@ cp_3_b = Plane(normal_vector=Vector(['0.187','0.352','-1.873']), constant_term='
 cp_3_c = Plane(normal_vector=Vector(['0.374','0.704','-3.746']), constant_term='-3.982')
 cp_3_d = Plane(normal_vector=Vector(['-0.561','-1.056','5.619']), constant_term='5.973')
 
-print_question('1') # Input is incorrect for this exercise
+print_question('1')
 print LinearSystem([cp_1_a, cp_1_b]).compute_solution()
 
 print_question('2')
