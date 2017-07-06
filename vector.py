@@ -29,7 +29,10 @@ class Vector(object):
 
 
     def __str__(self):
-        return 'Vector: {}'.format(self.coordinates)
+        num_decimal_places = 3
+        
+        rounded_coords = [round(x, num_decimal_places) for x in self.coordinates]
+        return 'Vector: {}'.format(rounded_coords)
 
 
     def __eq__(self, v):
