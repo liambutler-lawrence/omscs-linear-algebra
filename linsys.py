@@ -173,10 +173,10 @@ class LinearSystem(object):
             self.add_multiple_times_row_to_row(scalar_to_do_clearing, eq_to_do_clearing, eq_to_be_cleared)
 
 
-    def compute_solution_using_gaussian_elimination(self):
-        rref = self.compute_rref()
-
+    def compute_solution(self):
         list_contains = (lambda list, element: list.count(element) > 0)
+
+        rref = self.compute_rref()
 
         # Get list of pivot var positions 
         pivot_vars = [i for i in rref.indices_of_first_nonzero_terms_in_each_row() if i >= 0]
@@ -203,8 +203,9 @@ class LinearSystem(object):
 
 
     def compute_rows_for_parametrization(self, pivot_vars):
-        rows = deepcopy(self.planes)
         list_contains_all_zeros = (lambda list: reduce((lambda a,b: a and b), [MyDecimal(x).is_near_zero() for x in list]))
+
+        rows = deepcopy(self.planes)
 
         # Get list of free var positions
         all_vars = range(self.dimension)
@@ -215,7 +216,7 @@ class LinearSystem(object):
             normal_vector = ['-1' if i == free_var_position else '0' for i in all_vars]
             rows.insert(free_var_position, Plane(Vector(normal_vector), '0'))
 
-        # Check each redundant (0 = 0) equation to make sure it is not an invalid (0 = k) equation 
+        # Check each redundant (0 = 0) equation to make sure it is not an invalid (0 = k) equation
         for redundant_eq in rows[self.dimension:]:
             is_lhs_zero = list_contains_all_zeros(redundant_eq.normal_vector.coordinates)
             is_rhs_zero = MyDecimal(redundant_eq.constant_term).is_near_zero()

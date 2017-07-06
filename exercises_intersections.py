@@ -38,7 +38,7 @@ gep_1_b = Plane(Vector(['1', '-4', '4']), '21')
 gep_1_c = Plane(Vector(['7', '-5', '-11']), '0')
 
 print_question('Intersection')
-print LinearSystem([gep_1_a, gep_1_b, gep_1_c]).compute_solution_using_gaussian_elimination()
+print LinearSystem([gep_1_a, gep_1_b, gep_1_c]).compute_solution()
 
 
 print_quiz('More Gaussian Elimination Practice')
@@ -56,13 +56,13 @@ mgep_3_b = Plane(Vector(['3', '6', '2']), '1')
 mgep_3_c = Plane(Vector(['-1', '-2', '-1']), '1')
 
 print_question('Intersection 1')
-print LinearSystem([mgep_1_a, mgep_1_b, mgep_1_c]).compute_solution_using_gaussian_elimination()
+print LinearSystem([mgep_1_a, mgep_1_b, mgep_1_c]).compute_solution()
 
 print_question('Intersection 2')
-print LinearSystem([mgep_2_a, mgep_2_b, mgep_2_c]).compute_solution_using_gaussian_elimination()
+print LinearSystem([mgep_2_a, mgep_2_b, mgep_2_c]).compute_solution()
 
 print_question('Intersection 3')
-print LinearSystem([mgep_3_a, mgep_3_b, mgep_3_c]).compute_solution_using_gaussian_elimination()
+print LinearSystem([mgep_3_a, mgep_3_b, mgep_3_c]).compute_solution()
 
 
 def test(i, system, expression):
@@ -220,13 +220,13 @@ cges_3_c = Plane(normal_vector=Vector(['2.016','-9.924','-1.367']), constant_ter
 cges_3_d = Plane(normal_vector=Vector(['2.167','-13.543','-18.883']), constant_term='-10.567')
 
 print_question('1')
-print LinearSystem([cges_1_a, cges_1_b]).compute_solution_using_gaussian_elimination()
+print LinearSystem([cges_1_a, cges_1_b]).compute_solution()
 
 print_question('2')
-print LinearSystem([cges_2_a, cges_2_b, cges_2_c]).compute_solution_using_gaussian_elimination()
+print LinearSystem([cges_2_a, cges_2_b, cges_2_c]).compute_solution()
 
 print_question('3')
-print LinearSystem([cges_3_a, cges_3_b, cges_3_c, cges_3_d]).compute_solution_using_gaussian_elimination()
+print LinearSystem([cges_3_a, cges_3_b, cges_3_c, cges_3_d]).compute_solution()
 
 
 print_quiz('Coding Parametrization')
@@ -244,13 +244,13 @@ cp_3_c = Plane(normal_vector=Vector(['0.374','0.704','-3.746']), constant_term='
 cp_3_d = Plane(normal_vector=Vector(['-0.561','-1.056','5.619']), constant_term='5.973')
 
 print_question('1') # Input is incorrect for this exercise
-print LinearSystem([cp_1_a, cp_1_b]).compute_solution_using_gaussian_elimination()
+print LinearSystem([cp_1_a, cp_1_b]).compute_solution()
 
 print_question('2')
-print LinearSystem([cp_2_a, cp_2_b, cp_2_c]).compute_solution_using_gaussian_elimination()
+print LinearSystem([cp_2_a, cp_2_b, cp_2_c]).compute_solution()
 
 print_question('3')
-print LinearSystem([cp_3_a, cp_3_b, cp_3_c, cp_3_d]).compute_solution_using_gaussian_elimination()
+print LinearSystem([cp_3_a, cp_3_b, cp_3_c, cp_3_d]).compute_solution()
 
 
 print_info('END')
